@@ -20,3 +20,7 @@
 {"ts":"2026-09-02T13:48:59.428Z","agent":{"id":"head-of-people","version":"5.0"},"type":"idle","summary":"Работы нет, модель не вызывалась","outcome":"idle"}
 {"ts":"2026-09-02T13:52:16.927Z","agent":{"id":"founder"},"type":"requisition_filed","subject":"head-of-product","summary":"Нужен Head of Product: некому решать, что строим и зачем","detail_ref":"org/requisitions/head-of-product.md","outcome":"ok"}
 {"ts":"2026-09-02T13:57:17.325Z","agent":{"id":"head-of-people","version":"5.0"},"type":"package_created","subject":"head-of-product","summary":"Пакет Head of Product 1.0 создан","detail_ref":"roles/head-of-product/","outcome":"ok"}
+{"ts":"2026-09-02T14:29:40.898Z","agent":{"id":"founder"},"type":"decision","subject":"org/PACKAGE-ACCEPTANCE.md","summary":"Приёмка разведена на два уровня; граница обязана быть соседней","detail_ref":"org/PACKAGE-ACCEPTANCE.md","outcome":"ok"}
+{"ts":"2026-09-02T14:29:40.967Z","agent":{"id":"founder"},"type":"decision","subject":"office","summary":"Заведён проект office: решение о проектах принимает основатель","detail_ref":"projects/office/BRIEF.md","outcome":"ok"}
+{"ts":"2026-09-02T14:29:41.039Z","agent":{"id":"founder"},"type":"review","subject":"head-of-product","summary":"Пакет head-of-product 1.0 возвращён: пункты 12, 14, 16","detail_ref":"org/reviews/head-of-product-1.md","outcome":"ok"}
+{"ts":"2026-09-02T14:29:41.113Z","agent":{"id":"founder"},"type":"approved","subject":"head-of-people","summary":"Пакет head-of-people 6.0: два уровня приёмки, лимит 100000","outcome":"ok"}
