@@ -95,6 +95,19 @@ check(9, "org/ORG.md не изменён без вердикта «принят�
 const logged = todayEvents.some((e) => e.agent?.id === role || e.subject === role);
 check(10, "в журнале за сегодня есть событие об этой работе", logged);
 
+// 11. после возврата версия обязана вырасти
+const ver = (t) => { const m = /(\d+)\.(\d+)/.exec(t || ""); return m ? [+m[1], +m[2]] : null; };
+const cur = ver(/Версия пакета:\s*([\d.]+)/i.exec(profile)?.[1]);
+let returnedAt = null;
+for (const f of reviews.sort()) {
+  const t = readFileSync(join(ROOT, "org/reviews", f), "utf8");
+  if (/Вердикт:\s*\**\s*вернуть/i.test(t)) returnedAt = ver(/версия\s*([\d.]+)/i.exec(t)?.[1]);
+}
+if (!returnedAt) check(11, "версия после возврата (возвратов не было)", true);
+else check(11, "после возврата версия пакета выше, чем в вердикте",
+  !!cur && (cur[0] > returnedAt[0] || (cur[0] === returnedAt[0] && cur[1] > returnedAt[1])),
+  cur ? `сейчас ${cur.join(".")}, в вердикте ${returnedAt.join(".")}` : "версия не найдена");
+
 let bad = 0;
 for (const r of results) {
   if (!r.ok) bad++;
