@@ -1,3 +1,11 @@
+---
+kind: requisition
+role: head-of-product
+decision: approved
+decided_at: 2026-09-02
+reports_to: ceo
+---
+
 # Заявка: Head of Product
 
 **Что не делается сегодня.** Некому решать, что мы строим и зачем. Продукт

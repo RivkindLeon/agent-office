@@ -1,3 +1,12 @@
+---
+kind: review
+role: head-of-people
+package_version: "4.0"
+round: 1
+verdict: accepted
+reviewer: founder
+---
+
 # Ревью: head-of-people, версия 4.0, круг 1
 
 Вердикт: **принято**

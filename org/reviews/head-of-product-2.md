@@ -1,3 +1,12 @@
+---
+kind: review
+role: head-of-product
+package_version: 1.0
+round: 2
+verdict: changes_requested
+reviewer: founder
+---
+
 # Ревью: head-of-product, версия 1.0, круг 2
 
 Вердикт: **вернуть**

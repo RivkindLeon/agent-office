@@ -1,8 +1,17 @@
 {
-  "_": "Кто какие пути имеет право менять. deny сильнее allow. Проверяется org/tools/diff-guard.mjs до коммита.",
-  "founder": { "allow": ["**"], "deny": [] },
+  "_": "Who may change which paths. deny beats allow. Enforced by org/tools/diff-guard.mjs before the commit.",
+  "founder": {
+    "allow": [
+      "**"
+    ],
+    "deny": []
+  },
   "head-of-people": {
-    "allow": ["roles/**", "org/ORG.md", "org/reviews/**", "journal/*.jsonl", "org/INBOX.md"],
+    "allow": [
+      "roles/**",
+      "org/reviews/**",
+      "journal/*.jsonl"
+    ],
     "deny": [
       "roles/head-of-people/CHARTER.md",
       "roles/head-of-people/INSTRUCTIONS.md",
@@ -10,13 +19,30 @@
       "roles/head-of-people/COMMS.md",
       "roles/head-of-people/ACCEPTANCE.md",
       "roles/head-of-people/PROFILE.md",
-      "COMPANY.md", "org/HIRING.md", "org/PACKAGE-ACCEPTANCE.md",
-      "org/CHANNELS.md", "org/write-policy.json", "org/founder-key.sha256",
-      "org/tools/**", ".github/**", "docs/**"
+      "COMPANY.md",
+      "org/HIRING.md",
+      "org/PACKAGE-ACCEPTANCE.md",
+      "org/CHANNELS.md",
+      "org/write-policy.json",
+      "org/founder-key.sha256",
+      "org/tools/**",
+      ".github/**",
+      "docs/**",
+      "org/ORG.md"
     ]
   },
   "head-of-product": {
-    "allow": ["projects/**", "roles/head-of-product/notes/**", "journal/*.jsonl", "org/INBOX.md"],
-    "deny": ["COMPANY.md", "org/tools/**", "org/write-policy.json", "org/founder-key.sha256", ".github/**"]
+    "allow": [
+      "projects/**",
+      "roles/head-of-product/notes/**",
+      "journal/*.jsonl"
+    ],
+    "deny": [
+      "COMPANY.md",
+      "org/tools/**",
+      "org/write-policy.json",
+      "org/founder-key.sha256",
+      ".github/**"
+    ]
   }
 }

@@ -1,3 +1,11 @@
+---
+kind: requisition
+role: head-of-people
+decision: approved
+decided_at: 2026-09-02
+reports_to: ceo
+---
+
 # Заявка: Head of People
 
 **Что не делается сегодня.** Компанию некому строить как компанию. Есть работа,

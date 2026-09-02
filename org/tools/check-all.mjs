@@ -1,9 +1,9 @@
-// Приёмка всех пакетов, кроме тех, что сейчас в работе.
+// Acceptance for every package except those currently being worked on.
 //
-// Пакет в состоянии "вернули на правки" обязан не проходить проверку — это
-// смысл возврата, а не поломка. Если гонять его в CI, main будет постоянно
-// красным, и красный перестанут читать. Поэтому проверяем инварианты, а не
-// незавершённую работу.
+// A package that was sent back for changes is supposed to fail its checks -
+// that is what a return means. Running it in CI would keep main permanently
+// red, and a permanently red main stops being read. So this checks invariants,
+// not work in progress.
 
 import { execFileSync } from "node:child_process";
 import { ROOT, readState } from "./state.mjs";
@@ -12,15 +12,15 @@ const SKIP = new Set(["changes_requested", "requisition_pending", "requisition_a
 let bad = 0;
 
 for (const r of Object.values(readState())) {
-  if (!r.packageVersion) continue;
-  if (SKIP.has(r.state)) { console.log(`~ ${r.id}: пропущен, состояние «${r.state}»`); continue; }
+  if (!r.version) continue;
+  if (SKIP.has(r.state)) { console.log(`~  ${r.id}: skipped, state "${r.state}"`); continue; }
   try {
     execFileSync(process.execPath, ["org/tools/check-package.mjs", r.id], { cwd: ROOT, encoding: "utf8" });
-    console.log(`ок ${r.id} ${r.packageVersion}`);
+    console.log(`ok ${r.id} ${r.version}`);
   } catch (e) {
     bad++;
-    console.log(`ПРОВАЛ ${r.id} ${r.packageVersion}`);
-    console.log((e.stdout || "").split("\n").filter((l) => l.includes("ПРОВАЛ")).join("\n"));
+    console.log(`FAILED ${r.id} ${r.version}`);
+    console.log((e.stdout || "").split("\n").filter((l) => l.includes("FAILED")).join("\n"));
   }
 }
 process.exit(bad ? 1 : 0);

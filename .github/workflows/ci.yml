@@ -15,7 +15,7 @@ jobs:
         run: node --test org/tools/*.test.mjs
       - name: Журнал против схемы
         run: node org/tools/validate-journal.mjs
-      - name: Состояние компании без расхождений
-        run: node org/tools/state.mjs
+      - name: Оргструктура собрана из состояния
+        run: node org/tools/org.mjs --check
       - name: Пакеты действующих должностей
         run: node org/tools/check-all.mjs

@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "role": "head-of-people",
+  "version": "7.0",
+  "reports_to": "ceo",
+  "grade": "middle",
+  "mode": "strict",
+  "model": {
+    "primary": "openai/gpt-5.6-luna",
+    "fallbacks": [
+      "openai/gpt-5.5"
+    ]
+  },
+  "tools_profile": "coding",
+  "budget_tokens": 100000,
+  "boundaries": [
+    "не решает, кого нанимать — может только предложить",
+    "не разбирается в предмете и не судит о технических решениях",
+    "не ставит рабочие задачи другим должностям",
+    "не правит хартию, чужие пакеты и свой собственный",
+    "не отвечает за продукт и его код",
+    "не додумывает непонятное — возвращает вопросами"
+  ],
+  "triggers": [
+    {
+      "id": "write-package",
+      "when": {
+        "op": "role_state",
+        "scope": "others",
+        "state": "requisition_approved"
+      },
+      "task": "написать пакет должности {role} — заявка одобрена, {requisition}"
+    },
+    {
+      "id": "revise-package",
+      "when": {
+        "op": "role_state",
+        "scope": "others",
+        "state": "changes_requested",
+        "max_round": 2
+      },
+      "task": "круг правок по пакету {role} — вердикт в {review}, читать целиком"
+    },
+    {
+      "id": "record-hire",
+      "when": {
+        "op": "role_state",
+        "scope": "others",
+        "state": "accepted"
+      },
+      "task": "внести {role} в org/ORG.md — вердикт «принято» на версию {version}"
+    }
+  ]
+}

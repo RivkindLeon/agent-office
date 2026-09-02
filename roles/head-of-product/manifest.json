@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "role": "head-of-product",
+  "version": "1.0",
+  "reports_to": "ceo",
+  "grade": "middle",
+  "mode": "strict",
+  "model": {
+    "primary": "openai/gpt-5.6-luna",
+    "fallbacks": [
+      "openai/gpt-5.5"
+    ]
+  },
+  "tools_profile": "coding",
+  "budget_tokens": 150000,
+  "boundaries": [
+    "не выбирает способ реализации: код, архитектуру, инструменты",
+    "не превращает требование в инженерный план и оценку трудозатрат",
+    "не принимает техническую готовность — только продуктовые критерии",
+    "не создаёт макеты и другие предметные результаты смежной функции"
+  ],
+  "triggers": [
+    {
+      "id": "office-needs-product",
+      "when": {
+        "op": "front_matter_equals",
+        "path": "projects/office/BRIEF.md",
+        "key": "status",
+        "value": "needs-product"
+      },
+      "task": "наполнить продуктовый бриф projects/office/BRIEF.md"
+    }
+  ]
+}

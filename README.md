@@ -17,8 +17,9 @@
 ```
 COMPANY.md          хартия основателя
 org/                структура, найм, заявки, вердикты
-  tools/            проверки процесса: приёмка пакета, валидация журнала
-roles/<должность>/  пакет: 6 файлов + notes/ — рабочее место сотрудника
+  tools/            движок: состояние, триггеры, приёмка, страж записи, журнал
+roles/<должность>/  пакет: 6 документов + manifest.json + notes/
+projects/<проект>/  долгоживущие продуктовые артефакты
 journal/            события компании
 docs/               схема журнала, прогресс, чужой опыт
 work/               рабочие артефакты
@@ -31,6 +32,13 @@ work/               рабочие артефакты
 ## Команды
 
 ```bash
-node org/tools/check-package.mjs head-of-people   # автоматическая часть приёмки
-node org/tools/validate-journal.mjs               # журнал против схемы
+node org/tools/state.mjs                    # состояние компании
+node org/tools/gate.mjs head-of-people      # есть ли работа у должности
+node org/tools/check-all.mjs                # приёмка пакетов
+node org/tools/validate-journal.mjs         # журнал против схемы
+node org/tools/org.mjs                      # пересобрать оргструктуру
+node --test org/tools/*.test.mjs            # тесты движка
 ```
+
+Машинные факты живут в `manifest.json` и front matter документов; проза их не
+дублирует и может быть переписана или переведена, не задев движок.

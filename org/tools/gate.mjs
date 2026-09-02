@@ -1,16 +1,17 @@
-// Проверка триггеров должности ДО вызова модели (COMPANY.md, закон «нет входа —
-// нет смены»). Ничего не пишет и не решает: только отвечает, есть ли работа.
-// Состояние берётся из общего редьюсера, а не восстанавливается заново.
+// Checks a role's triggers BEFORE any model is called (COMPANY.md, law 2:
+// no input, no shift). Writes nothing and decides nothing - it only answers
+// whether there is work. Triggers come from the role manifest, so adding a
+// role never means editing this file.
 //
 //   node org/tools/gate.mjs head-of-people
 //
-// Код возврата: 0 — работа есть, 3 — работы нет.
+// Exit code: 0 - there is work, 3 - there is none.
 
 import { readState, tasksFor } from "./state.mjs";
 
 const role = process.argv[2];
-if (!role) { console.error("укажи должность"); process.exit(2); }
+if (!role) { console.error("usage: gate.mjs <role>"); process.exit(2); }
 
 const tasks = tasksFor(role, readState());
-if (!tasks.length) { console.log(`${role}: работы нет`); process.exit(3); }
-console.log(`${role}: работа есть\n` + tasks.map((t) => `- ${t}`).join("\n"));
+if (!tasks.length) { console.log(`${role}: no work`); process.exit(3); }
+console.log(`${role}: work found\n` + tasks.map((t) => `- ${t}`).join("\n"));

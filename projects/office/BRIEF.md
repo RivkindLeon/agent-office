@@ -1,6 +1,11 @@
-# Проект: Офис
-
+---
+kind: brief
+project: office
 status: needs-product
+owner: unassigned
+---
+
+# Проект: Офис
 
 | | |
 |---|---|
