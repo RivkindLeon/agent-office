@@ -21,6 +21,9 @@
         "type": "hired",
         "subject": "head-of-people"
       }
+    ],
+    "assume_reviewed": [
+      "head-of-people"
     ]
   },
   "expect": {

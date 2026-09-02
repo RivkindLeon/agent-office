@@ -44,6 +44,19 @@ function build(given) {
     }
   }
 
+  // Roles listed in assume_reviewed get accepted verdicts at whatever version
+  // their manifest carries. Without this every scenario would also assert the
+  // "hired on an unreviewed package" reminder, and the fixtures would rot on
+  // every version bump.
+  for (const id of given.assume_reviewed || []) {
+    const version = JSON.parse(readFileSync(join(root, "roles", id, "manifest.json"), "utf8")).version;
+    for (const dimension of ["form", "substance"])
+      writeFileSync(join(root, "org/reviews", `${id}-0-${dimension}.md`),
+        frontMatter({ kind: "review", role: id, package_version: version, round: 0,
+          dimension, verdict: "accepted", analysis_by: "founder",
+          read_by: "founder", decided_by: "founder" }) + "\n# Ревью\n");
+  }
+
   (given.reviews || []).forEach((v, i) =>
     writeFileSync(join(root, "org/reviews", `${v.role}-${v.round || i + 1}-${v.dimension}.md`),
       frontMatter({ kind: "review", ...v }) + "\n# Ревью\n"));

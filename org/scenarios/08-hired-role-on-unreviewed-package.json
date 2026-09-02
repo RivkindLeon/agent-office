@@ -1,10 +1,10 @@
 {
-  "name": "Одной формы мало: пакет ждёт ревью по существу",
-  "why": "Кадровик не оценивает инженерную работу. Без вердикта заказчика найма нет.",
+  "name": "Нанятая должность с непроверенной версией всплывает у основателя",
+  "why": "Пакет продолжают править после найма. Сотрудник не должен работать по инструкции, которую никто не читал.",
   "given": {
     "requisitions": [
       {
-        "role": "head-of-engineering",
+        "role": "head-of-people",
         "decision": "approved",
         "hiring_manager": "founder",
         "reports_to": "ceo"
@@ -14,21 +14,17 @@
       {
         "role": "head-of-people",
         "from": "head-of-people"
-      },
-      {
-        "role": "head-of-engineering",
-        "version": "1.0"
       }
     ],
     "reviews": [
       {
-        "role": "head-of-engineering",
+        "role": "head-of-people",
         "package_version": "1.0",
         "round": 1,
         "dimension": "form",
         "verdict": "accepted",
-        "analysis_by": "head-of-people",
-        "read_by": "head-of-people",
+        "analysis_by": "founder",
+        "read_by": "founder",
         "decided_by": "founder"
       }
     ],
@@ -37,19 +33,17 @@
         "type": "hired",
         "subject": "head-of-people"
       }
-    ],
-    "assume_reviewed": [
-      "head-of-people"
     ]
   },
   "expect": {
     "states": {
-      "head-of-engineering": "review_pending"
+      "head-of-people": "hired"
     },
     "pending_kinds": [
-      "review_package"
+      "review_hired_package"
     ],
     "pending_dimensions": [
+      "form",
       "substance"
     ]
   }

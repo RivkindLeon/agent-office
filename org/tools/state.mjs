@@ -120,6 +120,11 @@ export function readState() {
     r.verdicts = byDimension;
     r.missing = DIMENSIONS.filter((d) => !byDimension[d]);
     const verdicts = DIMENSIONS.map((d) => byDimension[d]?.verdict);
+    // A hired role can still be running on an unreviewed instruction: the
+    // package keeps being edited after the hire. Being hired hides that, so it
+    // is surfaced separately - the working instruction of a live employee is
+    // exactly the document nobody should be running blind.
+    r.unreviewed = DIMENSIONS.filter((d) => byDimension[d]?.verdict !== "accepted");
     if (r.hired) r.state = "hired";
     else if (verdicts.includes("escalated")) r.state = "escalated";
     else if (verdicts.includes("changes_requested")) r.state = "changes_requested";
@@ -189,6 +194,11 @@ export function pendingForFounder(state = readState()) {
           where: `roles/${r.id}/` });
     if (r.state === "escalated") items.push({ ...base, kind: "escalation", where: r.lastReview.file });
     if (r.state === "accepted") items.push({ ...base, kind: "record_hire", where: "journal/" });
+    if (r.state === "hired" && r.version && r.unreviewed.length)
+      for (const d of r.unreviewed)
+        items.push({ ...base, kind: "review_hired_package", dimension: d,
+          who: d === "substance" ? (r.hiringManager || "заказчик") : "форма",
+          where: `roles/${r.id}/` });
     if (r.state === "changes_requested" && r.round >= 3)
       items.push({ ...base, kind: "third_round", where: r.lastReview.file });
   }
