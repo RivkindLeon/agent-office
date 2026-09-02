@@ -12,7 +12,8 @@ import { join } from "node:path";
 import { parseFrontMatter } from "./frontmatter.mjs";
 import { violations } from "./diff-guard.mjs";
 import { validateEvent } from "./validate-journal.mjs";
-import { ROOT, readState, tasksFor, pendingForFounder, renderOrg } from "./state.mjs";
+import { ROOT, readState, tasksFor, pendingForFounder } from "./state.mjs";
+import { renderOrg } from "./render.ru.mjs";
 
 const run = (args, env = {}) => {
   try {
@@ -118,5 +119,5 @@ test("nothing is waiting on the founder while a round is open", () => {
   const st = readState();
   const pending = pendingForFounder(st);
   if (st["head-of-product"].state === "changes_requested" && st["head-of-product"].round < 3)
-    assert.equal(pending.some((i) => i.what.includes("head-of-product")), false);
+    assert.equal(pending.some((i) => i.role === "head-of-product"), false);
 });

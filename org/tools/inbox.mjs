@@ -10,12 +10,11 @@
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { ROOT, readState, pendingForFounder } from "./state.mjs";
+import { renderInboxBody } from "./render.ru.mjs";
 
 const items = pendingForFounder(readState());
 
-const body = items.length
-  ? items.map((i, n) => `${n + 1}. ${i.what}\n   — ${i.how}\n   — \`${i.where}\``).join("\n\n")
-  : "Ничего не ждёт. Компания работает сама.";
+const body = renderInboxBody(items);
 
 if (process.argv.includes("--print")) { console.log(body); process.exit(0); }
 

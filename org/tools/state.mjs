@@ -154,67 +154,21 @@ export function tasksFor(roleId, state = readState()) {
   return tasks;
 }
 
-/** What is waiting on the founder. */
+/** What is waiting on the founder. Structured, not rendered: the Russian
+ * wording lives in render.ru.mjs so this file stays language-free. */
 export function pendingForFounder(state = readState()) {
   const items = [];
   for (const r of Object.values(state)) {
-    if (r.state === "requisition_pending")
-      items.push({ what: `заявка **${r.id}** ждёт решения`,
-        how: "поставить `decision: approved` или `declined` в front matter", where: r.requisition });
-    if (r.questions)
-      items.push({ what: `вопросы по **${r.id}**`, how: "ответить и закоммитить", where: r.questions });
-    if (r.state === "review_pending")
-      items.push({ what: `пакет **${r.id} ${r.version}** ждёт ревью`,
-        how: "пройти org/PACKAGE-ACCEPTANCE.md и положить вердикт", where: `roles/${r.id}/` });
-    if (r.state === "escalated")
-      items.push({ what: `эскалация по **${r.id}**`, how: "решить и закоммитить", where: r.lastReview.file });
-    if (r.state === "accepted")
-      items.push({ what: `**${r.id} ${r.version}** принят, но не нанят`,
-        how: "записать событие hired", where: "journal/" });
+    const base = { role: r.id, version: r.version, round: r.round };
+    if (r.state === "requisition_pending") items.push({ ...base, kind: "decide_requisition", where: r.requisition });
+    if (r.questions) items.push({ ...base, kind: "answer_questions", where: r.questions });
+    if (r.state === "review_pending") items.push({ ...base, kind: "review_package", where: `roles/${r.id}/` });
+    if (r.state === "escalated") items.push({ ...base, kind: "escalation", where: r.lastReview.file });
+    if (r.state === "accepted") items.push({ ...base, kind: "record_hire", where: "journal/" });
     if (r.state === "changes_requested" && r.round >= 3)
-      items.push({ what: `третий круг по **${r.id}**`, how: "решить спор или признать брак",
-        where: r.lastReview.file });
+      items.push({ ...base, kind: "third_round", where: r.lastReview.file });
   }
   return items;
-}
-
-const STATE_RU = {
-  requisition_pending: "заявка ждёт решения",
-  requisition_approved: "заявка одобрена, пакета нет",
-  review_pending: "пакет ждёт ревью",
-  changes_requested: "вернули на правки",
-  escalated: "эскалация",
-  accepted: "принят, не нанят",
-  hired: "нанят",
-};
-
-/** org/ORG.md is rendered from state, never hand-edited: drift becomes impossible. */
-export function renderOrg(state = readState()) {
-  const hired = Object.values(state).filter((r) => r.state === "hired");
-  const open = Object.values(state).filter((r) => r.state && r.state !== "hired");
-  const notes = (() => { try { return readFileSync(abs("org/ORG-NOTES.md"), "utf8").trim(); } catch { return ""; } })();
-  return `# Оргструктура
-
-Файл собирается \`org/tools/org.mjs\` из состояния компании. Руками не править:
-правка исчезнет при следующей сборке. Найм фиксируется событием \`hired\` в
-журнале, а событие от основателя требует его секрета — поэтому строку здесь
-нельзя получить, минуя решение.
-
-| Должность | Кому подчиняется | Пакет | Версия | Статус |
-|---|---|---|---|---|
-| Основатель | — | — | — | Leon, человек; вне оргструктуры |
-| CEO | — | — | — | исполняет основатель |
-${hired.map((r) => `| ${r.id} | ${r.reportsTo || "—"} | \`roles/${r.id}/\` | ${r.version} | нанят |`).join("\n") || "| — | | | | пока никого |"}
-
-## В работе
-
-${open.length
-    ? "| Должность | Состояние | Версия | Круг |\n|---|---|---|---|\n" +
-      open.map((r) => `| ${r.id} | ${STATE_RU[r.state] || r.state} | ${r.version || "—"} | ${r.round || "—"} |`).join("\n")
-    : "Ничего."}
-
-${notes}
-`;
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

@@ -6,7 +6,8 @@
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { ROOT, readState, renderOrg } from "./state.mjs";
+import { ROOT, readState } from "./state.mjs";
+import { renderOrg } from "./render.ru.mjs";
 
 const path = join(ROOT, "org", "ORG.md");
 const rendered = renderOrg(readState());
