@@ -1,6 +1,6 @@
 {
-  "name": "Оба измерения приняли — должность ждёт записи о найме",
-  "why": "Принято не равно нанят: найм фиксирует основатель событием.",
+  "name": "Both dimensions accepted: the role waits to be recorded as hired",
+  "why": "Accepted is not hired: the founder records the hire with an event.",
   "given": {
     "requisitions": [
       {
@@ -58,7 +58,7 @@
     },
     "tasks_contain": {
       "head-of-people": [
-        "внести head-of-engineering в org/ORG.md"
+        "record-hire"
       ]
     },
     "pending_kinds": [

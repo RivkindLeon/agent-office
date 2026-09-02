@@ -1,6 +1,6 @@
 {
-  "name": "Старое «принято» не годится для новой версии пакета",
-  "why": "Иначе одобрение однажды выданное авторизует любую последующую редакцию.",
+  "name": "An old acceptance does not carry over to a new package version",
+  "why": "Otherwise one approval would authorise every later revision.",
   "given": {
     "requisitions": [
       {

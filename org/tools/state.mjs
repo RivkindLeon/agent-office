@@ -158,13 +158,8 @@ const OPS = {
   },
 };
 
-const fill = (template, r) => template
-  .replace(/\{role\}/g, r.id)
-  .replace(/\{requisition\}/g, r.requisition || "")
-  .replace(/\{review\}/g, r.lastReview?.file || "")
-  .replace(/\{version\}/g, r.version || "");
-
-/** What the role must do on its own, without the founder. */
+/** What the role must do on its own, without the founder. Structured: the
+ * wording of a task is prose and lives in render.ru.mjs. */
 export function tasksFor(roleId, state = readState()) {
   const self = state[roleId];
   // A role that has not been hired does not work, whatever its triggers say.
@@ -173,8 +168,10 @@ export function tasksFor(roleId, state = readState()) {
   const tasks = [];
   for (const t of triggers) {
     const op = OPS[t.when?.op];
-    if (!op) { tasks.push(`НЕИЗВЕСТНЫЙ триггер ${t.id}: op=${t.when?.op}`); continue; }
-    for (const hit of op(t.when, self, state)) tasks.push(fill(t.task, hit));
+    if (!op) { tasks.push({ trigger: t.id, role: roleId, unknown: t.when?.op }); continue; }
+    for (const hit of op(t.when, self, state))
+      tasks.push({ trigger: t.id, role: hit.id, requisition: hit.requisition,
+        review: hit.lastReview?.file, version: hit.version, path: t.when.path });
   }
   return tasks;
 }

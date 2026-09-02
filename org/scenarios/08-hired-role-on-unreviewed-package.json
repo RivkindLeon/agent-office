@@ -1,6 +1,6 @@
 {
-  "name": "Нанятая должность с непроверенной версией всплывает у основателя",
-  "why": "Пакет продолжают править после найма. Сотрудник не должен работать по инструкции, которую никто не читал.",
+  "name": "A hired role on an unreviewed package surfaces for the founder",
+  "why": "Packages keep being edited after the hire. Nobody should run on an unread instruction.",
   "given": {
     "requisitions": [
       {

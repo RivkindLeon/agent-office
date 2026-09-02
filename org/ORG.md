@@ -9,7 +9,7 @@
 |---|---|---|---|---|
 | Основатель | — | — | — | Leon, человек; вне оргструктуры |
 | CEO | — | — | — | исполняет основатель |
-| head-of-people | ceo | `roles/head-of-people/` | 8.0 | нанят |
+| head-of-people | ceo | `roles/head-of-people/` | 9.0 | нанят |
 
 ## В работе
 

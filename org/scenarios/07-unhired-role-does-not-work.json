@@ -1,6 +1,6 @@
 {
-  "name": "Ненанятая должность не работает, что бы ни говорили её триггеры",
-  "why": "Пакет без найма — черновик: он не может начать действовать сам.",
+  "name": "A role that is not hired does not work, whatever its triggers say",
+  "why": "A package without a hire is a draft: it cannot start acting on its own.",
   "given": {
     "requisitions": [
       {

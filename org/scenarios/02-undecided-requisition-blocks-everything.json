@@ -1,6 +1,6 @@
 {
-  "name": "Нерассмотренная заявка ждёт основателя и не даёт работы",
-  "why": "Ни один найм не начинается без решения; кадровик не может начать сам.",
+  "name": "An undecided requisition waits for the founder and creates no work",
+  "why": "No hire starts without a decision; the hiring function cannot start on its own.",
   "given": {
     "requisitions": [
       {

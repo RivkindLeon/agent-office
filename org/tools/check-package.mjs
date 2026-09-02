@@ -18,7 +18,8 @@ if (!role) { console.error("usage: check-package.mjs <role>"); process.exit(2); 
 
 const JOURNAL_DIR = process.env.JOURNAL_DIR || "journal";
 const dir = join(ROOT, "roles", role);
-const DOCS = ["CHARTER.md", "INSTRUCTIONS.md", "IO.md", "COMMS.md", "ACCEPTANCE.md", "PROFILE.md"];
+const DOCS = ["CHARTER.md", "BOUNDARIES.md", "INSTRUCTIONS.md", "IO.md",
+  "COMMS.md", "ACCEPTANCE.md", "PROFILE.md"];
 const read = (f) => { try { return readFileSync(join(dir, f), "utf8"); } catch { return null; } };
 const git = (...a) => { try { return execFileSync("git", a, { cwd: ROOT, encoding: "utf8" }); } catch { return ""; } };
 
@@ -59,13 +60,13 @@ if (!(Number(m.budget_tokens) > 0)) manifestErrors.push("budget_tokens");
 check(2, "manifest declares role, version, mode, model, tools and budget",
   manifestErrors.length === 0, manifestErrors.join(", "));
 
-// 3. boundaries: at least three, and they live in the manifest as data
-check(3, "manifest lists at least three boundaries", (m.boundaries || []).length >= 3,
-  `${(m.boundaries || []).length}`);
+// 3. boundaries: prose in its own file, counted by structure, not by wording
+const boundaries = ((read("BOUNDARIES.md") || "").match(/^\s*[-*]\s+\S/gm) || []).length;
+check(3, "BOUNDARIES.md lists at least three boundaries", boundaries >= 3, `${boundaries}`);
 
 // 4. triggers are declarative and use known operations
 const OPS = ["role_state", "front_matter_equals", "file_exists"];
-const badTriggers = (m.triggers || []).filter((t) => !t.id || !t.task || !OPS.includes(t.when?.op));
+const badTriggers = (m.triggers || []).filter((t) => !t.id || !OPS.includes(t.when?.op));
 check(4, "triggers are declarative and use known operations",
   Array.isArray(m.triggers) && m.triggers.length > 0 && badTriggers.length === 0,
   badTriggers.map((t) => t.id || "?").join(", "));

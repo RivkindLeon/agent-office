@@ -1,6 +1,6 @@
 {
-  "name": "Одобренная заявка порождает работу кадровику",
-  "why": "Базовый цикл найма: решение основателя — единственный вход в процесс.",
+  "name": "An approved requisition creates work for the hiring function",
+  "why": "The base hiring loop: the founder's decision is the only way in.",
   "given": {
     "requisitions": [
       {
@@ -32,7 +32,7 @@
     },
     "tasks_contain": {
       "head-of-people": [
-        "написать пакет должности head-of-engineering"
+        "write-package"
       ]
     },
     "pending_kinds": []

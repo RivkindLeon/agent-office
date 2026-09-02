@@ -1,6 +1,6 @@
 {
-  "name": "Одной формы мало: пакет ждёт ревью по существу",
-  "why": "Кадровик не оценивает инженерную работу. Без вердикта заказчика найма нет.",
+  "name": "Form alone is not enough: the package waits for a substance verdict",
+  "why": "A recruiter does not grade engineering work. Without the hiring manager there is no hire.",
   "given": {
     "requisitions": [
       {

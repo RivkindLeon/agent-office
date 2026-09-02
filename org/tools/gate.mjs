@@ -8,10 +8,11 @@
 // Exit code: 0 - there is work, 3 - there is none.
 
 import { readState, tasksFor } from "./state.mjs";
+import { renderTask } from "./render.ru.mjs";
 
 const role = process.argv[2];
 if (!role) { console.error("usage: gate.mjs <role>"); process.exit(2); }
 
 const tasks = tasksFor(role, readState());
 if (!tasks.length) { console.log(`${role}: no work`); process.exit(3); }
-console.log(`${role}: work found\n` + tasks.map((t) => `- ${t}`).join("\n"));
+console.log(`${role}: work found\n` + tasks.map((t) => `- ${renderTask(t)}`).join("\n"));

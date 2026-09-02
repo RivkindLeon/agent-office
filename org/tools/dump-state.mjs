@@ -10,7 +10,7 @@ const state = readState();
 const out = { states: {}, tasks: {}, pending: [] };
 for (const r of Object.values(state)) {
   out.states[r.id] = r.state;
-  out.tasks[r.id] = tasksFor(r.id, state);
+  out.tasks[r.id] = tasksFor(r.id, state).map((t) => ({ trigger: t.trigger, role: t.role }));
 }
 out.pending = pendingForFounder(state).map((i) => ({ kind: i.kind, role: i.role, dimension: i.dimension || null }));
 console.log(JSON.stringify(out, null, 2));

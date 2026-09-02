@@ -91,11 +91,11 @@ for (const file of readdirSync(DIR).filter((f) => f.endsWith(".json")).sort()) {
         problems.push(`state ${role}: expected ${want}, got ${got.states[role]}`);
     for (const [role, needles] of Object.entries(sc.expect.tasks_contain || {}))
       for (const needle of needles)
-        if (!(got.tasks[role] || []).some((t) => t.includes(needle)))
+        if (!(got.tasks[role] || []).some((t) => t.trigger === needle))
           problems.push(`task for ${role} missing: ${needle}`);
     for (const role of sc.expect.tasks_empty || [])
       if ((got.tasks[role] || []).length)
-        problems.push(`${role} should have no work, got: ${got.tasks[role].join("; ")}`);
+        problems.push(`${role} should have no work, got: ${got.tasks[role].map((t) => t.trigger).join("; ")}`);
     if (sc.expect.pending_kinds) {
       const kinds = got.pending.map((p) => p.kind).sort();
       const want = [...sc.expect.pending_kinds].sort();

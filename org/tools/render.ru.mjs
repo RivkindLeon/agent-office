@@ -8,6 +8,18 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ROOT } from "./state.mjs";
 
+// Task wording for triggers, keyed by trigger id. The manifest declares WHEN a
+// role wakes up; what it is told is prose, and prose lives here.
+const TASKS_RU = {
+  "write-package": (t) => `написать пакет должности ${t.role} — заявка одобрена, ${t.requisition}`,
+  "revise-package": (t) => `круг правок по пакету ${t.role} — вердикт в ${t.review}, читать целиком`,
+  "record-hire": (t) => `внести ${t.role} в org/ORG.md — вердикт «принято» на версию ${t.version}`,
+  "office-needs-product": (t) => `наполнить продуктовый бриф ${t.path || "projects/office/BRIEF.md"}`,
+};
+
+export const renderTask = (t) =>
+  (TASKS_RU[t.trigger] || ((x) => `${x.trigger} по ${x.role}`))(t);
+
 export const STATE_RU = {
   requisition_pending: "заявка ждёт решения",
   requisition_approved: "заявка одобрена, пакета нет",

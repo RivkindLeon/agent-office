@@ -13,7 +13,7 @@ import { parseFrontMatter } from "./frontmatter.mjs";
 import { violations } from "./diff-guard.mjs";
 import { validateEvent } from "./validate-journal.mjs";
 import { ROOT, readState, tasksFor, pendingForFounder } from "./state.mjs";
-import { renderOrg } from "./render.ru.mjs";
+import { renderOrg, renderTask } from "./render.ru.mjs";
 
 const run = (args, env = {}) => {
   try {
@@ -105,8 +105,23 @@ test("triggers are declarative and only fire for hired roles", () => {
   const st = readState();
   const hop = tasksFor("head-of-people", st);
   if (st["head-of-product"].state === "changes_requested")
-    assert.ok(hop.some((t) => t.includes("круг правок")), "a return creates work for the hiring role");
+    assert.ok(hop.some((t) => t.trigger === "revise-package"), "a return creates work for the hiring role");
   assert.deepEqual(tasksFor("head-of-product", st), [], "a role that is not hired does not work");
+});
+
+test("no prose lives in the machine layer", () => {
+  const cyrillic = /[\u0400-\u04FF]/;
+  for (const role of ["head-of-people", "head-of-product"]) {
+    const raw = readFileSync(join(ROOT, `roles/${role}/manifest.json`), "utf8");
+    assert.equal(cyrillic.test(raw), false, `${role}/manifest.json contains prose`);
+  }
+  const policy = readFileSync(join(ROOT, "org/write-policy.json"), "utf8");
+  assert.equal(cyrillic.test(policy), false, "write-policy.json contains prose");
+});
+
+test("task wording comes from the renderer, not from the manifest", () => {
+  const text = renderTask({ trigger: "write-package", role: "x", requisition: "r.md" });
+  assert.match(text, /написать пакет/);
 });
 
 test("the org chart is a rendering, so it cannot drift", () => {
