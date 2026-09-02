@@ -24,3 +24,4 @@
 {"ts":"2026-09-02T14:29:40.967Z","agent":{"id":"founder"},"type":"decision","subject":"office","summary":"Заведён проект office: решение о проектах принимает основатель","detail_ref":"projects/office/BRIEF.md","outcome":"ok"}
 {"ts":"2026-09-02T14:29:41.039Z","agent":{"id":"founder"},"type":"review","subject":"head-of-product","summary":"Пакет head-of-product 1.0 возвращён: пункты 12, 14, 16","detail_ref":"org/reviews/head-of-product-1.md","outcome":"ok"}
 {"ts":"2026-09-02T14:29:41.113Z","agent":{"id":"founder"},"type":"approved","subject":"head-of-people","summary":"Пакет head-of-people 6.0: два уровня приёмки, лимит 100000","outcome":"ok"}
+{"ts":"2026-09-02T14:33:06.044Z","agent":{"id":"head-of-people","version":"6.0"},"type":"package_created","subject":"head-of-product","summary":"Пакет Head of Product исправлен по кругу 1","detail_ref":"roles/head-of-product/","outcome":"ok"}

@@ -28,14 +28,15 @@ if (role === "head-of-people") {
   }
   // 2. вердикт «вернуть», после которого нет принятого
   const verdicts = list("org/reviews").filter((f) => f.endsWith(".md")).sort();
-  const bySlug = {};
+  const bySlug = {}, bySlugFile = {};
   for (const f of verdicts) {
     const slug = f.replace(/-\d+\.md$/, "").replace(/\.md$/, "");
     const v = /Вердикт:\s*\**\s*(принято|вернуть|эскалация)/i.exec(read(`org/reviews/${f}`))?.[1];
-    if (v) bySlug[slug] = v.toLowerCase();
+    if (v) { bySlug[slug] = v.toLowerCase(); bySlugFile[slug] = f; }
   }
-  for (const [slug, v] of Object.entries(bySlug))
-    if (v === "вернуть") tasks.push(`круг правок по пакету ${slug} (вердикт «вернуть»)`);
+  for (const [slug, f] of Object.entries(bySlugFile))
+    if (bySlug[slug] === "вернуть")
+      tasks.push(`круг правок по пакету ${slug} — вердикт в org/reviews/${f}, читать его целиком`);
   // 3. принято, но в оргструктуре не записано
   const org = read("org/ORG.md");
   for (const [slug, v] of Object.entries(bySlug))
