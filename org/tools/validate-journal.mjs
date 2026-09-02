@@ -42,8 +42,11 @@ export function validateEvent(e) {
     if (e.agent?.id !== "founder") errs.push("sanction не от founder");
     if (!e.subject) errs.push("sanction без subject: не указан файл");
   }
-  if (e.usage && ["input_tokens", "output_tokens"].some((k) => k in e.usage && typeof e.usage[k] !== "number"))
-    errs.push("usage.*_tokens не число");
+  if (e.usage && ["input_tokens", "output_tokens"].some((k) => k in e.usage && (typeof e.usage[k] !== "number" || e.usage[k] < 0)))
+    errs.push("usage.*_tokens не неотрицательное число");
+  if ("schema_version" in e && e.schema_version !== 1) errs.push(`неизвестная schema_version: ${e.schema_version}`);
+  if ("duration_ms" in e && (typeof e.duration_ms !== "number" || e.duration_ms < 0)) errs.push("duration_ms не число");
+  if ("event_id" in e && !/^[0-9a-f-]{36}$/.test(e.event_id || "")) errs.push("event_id не uuid");
   return errs;
 }
 

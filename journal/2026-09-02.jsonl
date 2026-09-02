@@ -27,3 +27,4 @@
 {"ts":"2026-09-02T14:33:06.044Z","agent":{"id":"head-of-people","version":"6.0"},"type":"package_created","subject":"head-of-product","summary":"Пакет Head of Product исправлен по кругу 1","detail_ref":"roles/head-of-product/","outcome":"ok"}
 {"ts":"2026-09-02T18:26:15.373Z","agent":{"id":"founder"},"type":"decision","subject":"org/PACKAGE-ACCEPTANCE.md","summary":"Правило 11: после возврата версия пакета обязана вырасти","outcome":"ok"}
 {"ts":"2026-09-02T18:26:15.452Z","agent":{"id":"founder"},"type":"review","subject":"head-of-product","summary":"Пакет head-of-product возвращён кругом 2: не поднята версия","detail_ref":"org/reviews/head-of-product-2.md","outcome":"ok"}
+{"schema_version":1,"event_id":"2f73e81b-2b09-4824-91f1-a17a01973e6c","run_id":null,"ts":"2026-09-02T18:53:06.018Z","agent":{"id":"founder"},"type":"decision","subject":"org/tools","summary":"Ядро укреплено по внешнему разбору: P0 закрыт","detail_ref":"docs/PROGRESS.md","outcome":"ok"}

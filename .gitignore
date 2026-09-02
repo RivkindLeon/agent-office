@@ -1,1 +1,21 @@
 .DS_Store
+
+# Служебные файлы рабочей папки OpenClaw. Рабочая папка агента совпадает с
+# репозиторием, поэтому runtime кладёт их сюда сам. Это не документы компании,
+# а часть развёртывания, и в публичный репозиторий им нельзя: шаблоны USER.md и
+# TOOLS.md рассчитаны на личные данные и детали инфраструктуры.
+AGENTS.md
+SOUL.md
+USER.md
+TOOLS.md
+IDENTITY.md
+HEARTBEAT.md
+BOOTSTRAP.md
+MEMORY.md
+memory/
+openclaw-workspace-state.json
+
+# Секреты и локальное
+.env
+*.local
+*.token
