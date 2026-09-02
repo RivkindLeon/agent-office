@@ -18,7 +18,4 @@ jobs:
       - name: Состояние компании без расхождений
         run: node org/tools/state.mjs
       - name: Пакеты действующих должностей
-        run: |
-          for d in roles/*/; do
-            node org/tools/check-package.mjs "$(basename "$d")" || exit 1
-          done
+        run: node org/tools/check-all.mjs

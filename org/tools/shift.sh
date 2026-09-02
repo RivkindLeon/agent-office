@@ -62,11 +62,8 @@ if [[ "$WORK" == "1" ]]; then
   GUARD="$(node org/tools/diff-guard.mjs "$ROLE" 2>&1)" || fail "правки вне политики записи:
 $GUARD"
   node org/tools/validate-journal.mjs >/dev/null 2>&1 || fail "журнал не проходит проверку"
-  for d in roles/*/; do
-    r="$(basename "$d")"
-    CHECK="$(node org/tools/check-package.mjs "$r" 2>&1)" || fail "пакет $r не принят:
+  CHECK="$(node org/tools/check-all.mjs 2>&1)" || fail "пакет не принят:
 $(echo "$CHECK" | grep ПРОВАЛ)"
-  done
   DRIFT="$(node org/tools/state.mjs 2>&1 | grep '⚠' || true)"
   [[ -n "$DRIFT" ]] && fail "документы разошлись с состоянием:
 $DRIFT"
