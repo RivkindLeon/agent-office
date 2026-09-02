@@ -22,8 +22,11 @@ const ITEM_RU = {
   decide_requisition: (i) => [`заявка **${i.role}** ждёт решения`,
     "поставить `decision: approved` или `declined` в front matter"],
   answer_questions: (i) => [`вопросы по **${i.role}**`, "ответить и закоммитить"],
-  review_package: (i) => [`пакет **${i.role} ${i.version}** ждёт ревью`,
-    "пройти org/PACKAGE-ACCEPTANCE.md и положить вердикт"],
+  review_package: (i) => i.dimension === "substance"
+    ? [`пакет **${i.role} ${i.version}** ждёт ревью **по существу** (заказчик: ${i.who})`,
+       "проверить, та ли это работа, и положить вердикт с `dimension: substance`"]
+    : [`пакет **${i.role} ${i.version}** ждёт ревью **по форме**`,
+       "пройти org/PACKAGE-ACCEPTANCE.md и положить вердикт с `dimension: form`"],
   escalation: (i) => [`эскалация по **${i.role}**`, "решить и закоммитить"],
   record_hire: (i) => [`**${i.role} ${i.version}** принят, но не нанят`, "записать событие hired"],
   third_round: (i) => [`третий круг по **${i.role}**`, "решить спор или признать брак"],

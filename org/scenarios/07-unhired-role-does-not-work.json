@@ -1,0 +1,33 @@
+{
+  "name": "Ненанятая должность не работает, что бы ни говорили её триггеры",
+  "why": "Пакет без найма — черновик: он не может начать действовать сам.",
+  "given": {
+    "requisitions": [
+      {
+        "role": "head-of-people",
+        "decision": "approved",
+        "hiring_manager": "founder",
+        "reports_to": "ceo"
+      }
+    ],
+    "roles": [
+      {
+        "role": "head-of-people",
+        "from": "head-of-people"
+      },
+      {
+        "role": "head-of-engineering",
+        "version": "1.0"
+      }
+    ],
+    "journal": []
+  },
+  "expect": {
+    "tasks_empty": [
+      "head-of-people"
+    ],
+    "states": {
+      "head-of-people": "review_pending"
+    }
+  }
+}

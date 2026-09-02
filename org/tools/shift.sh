@@ -57,6 +57,27 @@ node org/tools/log-event.mjs $ROLE <тип> \"<что сделал>\" --subject 
   [[ $RC -ne 0 && $RC -ne 124 ]] && say "! вызов сотрудника завершился с кодом $RC"
   say "--- сотрудник сказал:"
   say "$AGENT_OUT"
+
+  # Second pass. The first pass produces something plausible, the second makes
+  # it correct: asking an agent to re-read its own work reliably surfaces
+  # blockers. One extra call a day is the cheapest quality we can buy.
+  CRITIQUE="Ты только что закончил работу в этой смене:
+$AGENT_OUT
+
+Теперь прочитай её как проверяющий, а не как автор. Пройди по
+org/PACKAGE-ACCEPTANCE.md, а если это работа должности - по её ACCEPTANCE.md.
+Ищи то, за что работу вернули бы: границы, повторяющие общие запреты; критерии,
+описывающие пакет вместо работы; триггеры на несуществующие пути; проза,
+дублирующая машинные факты; непроставленная версия.
+
+Найденное исправь сам, здесь же. Ответь двумя списками: что нашёл и что
+исправил. Если не нашёл ничего - так и скажи, но сначала проверь каждый пункт."
+
+  CRITIQUE_OUT="$(timeout "$AGENT_TIMEOUT" "$OPENCLAW" agent --agent "$ROLE" --message "$CRITIQUE" 2>&1 | grep -v '^\[plugins\]' | tail -15)"
+  [[ $? -eq 124 ]] && say "! второй проход не уложился в ${AGENT_TIMEOUT}с"
+  say "--- второй проход:"
+  say "$CRITIQUE_OUT"
+  node org/tools/log-event.mjs "$ROLE" self_review "Второй проход: перечитал и поправил свою работу" >/dev/null 2>&1
 fi
 
 # --- machine acceptance: nothing red reaches the repository

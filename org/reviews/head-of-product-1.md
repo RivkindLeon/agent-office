@@ -4,14 +4,19 @@ role: head-of-product
 package_version: 1.0
 round: 1
 verdict: changes_requested
-reviewer: founder
+dimension: form
+analysis_by: assistant
+read_by: assistant
+decided_by: founder
 ---
 
 # Ревью: head-of-product, версия 1.0, круг 1
 
 Вердикт: **вернуть**
 
-Проверял основатель (исполняет должность CEO), по `org/PACKAGE-ACCEPTANCE.md`.
+Разбор по пунктам делал ассистент, читал файлы пакета он же; решение принял
+основатель. Это записано в `analysis_by` и `decided_by` — чтобы через полгода
+по журналу было видно не только чьё решение, но и чьими глазами смотрели, по `org/PACKAGE-ACCEPTANCE.md`.
 
 ## Пункты
 

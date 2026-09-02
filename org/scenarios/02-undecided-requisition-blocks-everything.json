@@ -1,0 +1,37 @@
+{
+  "name": "Нерассмотренная заявка ждёт основателя и не даёт работы",
+  "why": "Ни один найм не начинается без решения; кадровик не может начать сам.",
+  "given": {
+    "requisitions": [
+      {
+        "role": "head-of-engineering",
+        "decision": "pending",
+        "hiring_manager": "founder",
+        "reports_to": "ceo"
+      }
+    ],
+    "roles": [
+      {
+        "role": "head-of-people",
+        "from": "head-of-people"
+      }
+    ],
+    "journal": [
+      {
+        "type": "hired",
+        "subject": "head-of-people"
+      }
+    ]
+  },
+  "expect": {
+    "states": {
+      "head-of-engineering": "requisition_pending"
+    },
+    "tasks_empty": [
+      "head-of-people"
+    ],
+    "pending_kinds": [
+      "decide_requisition"
+    ]
+  }
+}

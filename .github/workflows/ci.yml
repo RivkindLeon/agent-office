@@ -17,5 +17,7 @@ jobs:
         run: node org/tools/validate-journal.mjs
       - name: Оргструктура собрана из состояния
         run: node org/tools/org.mjs --check
+      - name: Золотые сценарии компании
+        run: node org/tools/scenarios.mjs
       - name: Пакеты действующих должностей
         run: node org/tools/check-all.mjs

@@ -4,14 +4,19 @@ role: head-of-people
 package_version: "4.0"
 round: 1
 verdict: accepted
-reviewer: founder
+dimension: form
+analysis_by: assistant
+read_by: assistant
+decided_by: founder
 ---
 
 # Ревью: head-of-people, версия 4.0, круг 1
 
 Вердикт: **принято**
 
-Проверял основатель (исполняет должность CEO).
+Разбор по пунктам делал ассистент, читал файлы пакета он же; решение принял
+основатель. Это записано в `analysis_by` и `decided_by` — чтобы через полгода
+по журналу было видно не только чьё решение, но и чьими глазами смотрели.
 
 ## Пункты
 

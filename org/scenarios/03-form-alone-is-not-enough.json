@@ -1,0 +1,53 @@
+{
+  "name": "Одной формы мало: пакет ждёт ревью по существу",
+  "why": "Кадровик не оценивает инженерную работу. Без вердикта заказчика найма нет.",
+  "given": {
+    "requisitions": [
+      {
+        "role": "head-of-engineering",
+        "decision": "approved",
+        "hiring_manager": "founder",
+        "reports_to": "ceo"
+      }
+    ],
+    "roles": [
+      {
+        "role": "head-of-people",
+        "from": "head-of-people"
+      },
+      {
+        "role": "head-of-engineering",
+        "version": "1.0"
+      }
+    ],
+    "reviews": [
+      {
+        "role": "head-of-engineering",
+        "package_version": "1.0",
+        "round": 1,
+        "dimension": "form",
+        "verdict": "accepted",
+        "analysis_by": "head-of-people",
+        "read_by": "head-of-people",
+        "decided_by": "founder"
+      }
+    ],
+    "journal": [
+      {
+        "type": "hired",
+        "subject": "head-of-people"
+      }
+    ]
+  },
+  "expect": {
+    "states": {
+      "head-of-engineering": "review_pending"
+    },
+    "pending_kinds": [
+      "review_package"
+    ],
+    "pending_dimensions": [
+      "substance"
+    ]
+  }
+}

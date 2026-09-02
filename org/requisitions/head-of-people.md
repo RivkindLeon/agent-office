@@ -4,6 +4,7 @@ role: head-of-people
 decision: approved
 decided_at: 2026-09-02
 reports_to: ceo
+hiring_manager: founder
 ---
 
 # Заявка: Head of People

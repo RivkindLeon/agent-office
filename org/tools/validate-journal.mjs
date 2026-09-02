@@ -20,7 +20,7 @@ export const OUTCOMES = ["ok", "idle", "blocked", "failed"];
 export const TYPES = [
   "shift_start", "shift_end", "idle", "blocked",
   "requisition_filed", "package_created", "review", "returned", "approved",
-  "hired", "role_review", "sanction",
+  "hired", "role_review", "sanction", "self_review",
   "decision", "ticket_created", "design_ready", "commit", "pr_opened",
   "ci_failed", "merge", "deploy", "handoff",
 ];

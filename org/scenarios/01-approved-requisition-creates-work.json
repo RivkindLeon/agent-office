@@ -1,0 +1,37 @@
+{
+  "name": "Одобренная заявка порождает работу кадровику",
+  "why": "Базовый цикл найма: решение основателя — единственный вход в процесс.",
+  "given": {
+    "requisitions": [
+      {
+        "role": "head-of-engineering",
+        "decision": "approved",
+        "hiring_manager": "founder",
+        "reports_to": "ceo"
+      }
+    ],
+    "roles": [
+      {
+        "role": "head-of-people",
+        "from": "head-of-people"
+      }
+    ],
+    "journal": [
+      {
+        "type": "hired",
+        "subject": "head-of-people"
+      }
+    ]
+  },
+  "expect": {
+    "states": {
+      "head-of-engineering": "requisition_approved"
+    },
+    "tasks_contain": {
+      "head-of-people": [
+        "написать пакет должности head-of-engineering"
+      ]
+    },
+    "pending_kinds": []
+  }
+}

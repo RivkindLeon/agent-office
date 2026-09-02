@@ -1,0 +1,65 @@
+{
+  "name": "Оба измерения приняли — должность ждёт записи о найме",
+  "why": "Принято не равно нанят: найм фиксирует основатель событием.",
+  "given": {
+    "requisitions": [
+      {
+        "role": "head-of-engineering",
+        "decision": "approved",
+        "hiring_manager": "founder",
+        "reports_to": "ceo"
+      }
+    ],
+    "roles": [
+      {
+        "role": "head-of-people",
+        "from": "head-of-people"
+      },
+      {
+        "role": "head-of-engineering",
+        "version": "1.0"
+      }
+    ],
+    "reviews": [
+      {
+        "role": "head-of-engineering",
+        "package_version": "1.0",
+        "round": 1,
+        "dimension": "form",
+        "verdict": "accepted",
+        "analysis_by": "head-of-people",
+        "read_by": "head-of-people",
+        "decided_by": "founder"
+      },
+      {
+        "role": "head-of-engineering",
+        "package_version": "1.0",
+        "round": 1,
+        "dimension": "substance",
+        "verdict": "accepted",
+        "analysis_by": "founder",
+        "read_by": "founder",
+        "decided_by": "founder"
+      }
+    ],
+    "journal": [
+      {
+        "type": "hired",
+        "subject": "head-of-people"
+      }
+    ]
+  },
+  "expect": {
+    "states": {
+      "head-of-engineering": "accepted"
+    },
+    "tasks_contain": {
+      "head-of-people": [
+        "внести head-of-engineering в org/ORG.md"
+      ]
+    },
+    "pending_kinds": [
+      "record_hire"
+    ]
+  }
+}

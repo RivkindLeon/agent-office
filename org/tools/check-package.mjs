@@ -90,9 +90,10 @@ const reviews = existsSync(join(ROOT, "org/reviews"))
   ? readdirSync(join(ROOT, "org/reviews")).filter((f) => f.startsWith(role) && f.endsWith(".md")) : [];
 const badReviews = reviews.filter((f) => {
   const fm = readFrontMatter(join(ROOT, "org/reviews", f));
-  return !fm || !fm.verdict || !fm.package_version;
+  return !fm || !fm.verdict || !fm.package_version || !fm.dimension
+    || !fm.analysis_by || !fm.decided_by;
 });
-check(8, "every review of this role has machine-readable front matter",
+check(8, "reviews declare verdict, dimension and who analysed vs who decided",
   badReviews.length === 0, badReviews.join(", "));
 
 // 9. the shift left a trace

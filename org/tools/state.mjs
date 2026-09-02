@@ -13,7 +13,10 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { readFrontMatter } from "./frontmatter.mjs";
 
-export const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+// AGENT_OFFICE_ROOT lets scenario fixtures run the real engine against a
+// synthetic repository, which is how instructions get regression-tested.
+export const ROOT = process.env.AGENT_OFFICE_ROOT
+  || join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
 const abs = (p) => join(ROOT, p);
 const list = (p) => { try { return readdirSync(abs(p)); } catch { return []; } };
@@ -23,12 +26,19 @@ const readJson = (p) => { try { return JSON.parse(readFileSync(abs(p), "utf8"));
 export const STATES = [
   "requisition_pending",   // requisition exists, founder has not decided
   "requisition_approved",  // approved, package not written yet
-  "review_pending",        // package exists, no verdict for its current version
-  "changes_requested",     // verdict "changes_requested" for the current version
-  "escalated",             // verdict "escalated"
-  "accepted",              // accepted but not recorded as hired
+  "review_pending",        // package exists, a verdict is missing for this version
+  "changes_requested",     // some dimension returned the current version
+  "escalated",             // some dimension escalated
+  "accepted",              // both dimensions accepted this version
   "hired",                 // founder logged a "hired" event
 ];
+
+// A package is judged along two independent dimensions, by two different
+// people. Form is the shape of the package - the hiring function can check it
+// without knowing the trade. Substance is whether the described work is the
+// right work - only the function that ordered the role can say that. Merging
+// them was the reason a recruiter was implicitly asked to grade engineering.
+export const DIMENSIONS = ["form", "substance"];
 
 const cmpVersion = (a, b) => {
   const pa = String(a || "0.0").split(".").map(Number);
@@ -59,6 +69,7 @@ export function readState() {
       requisition: `org/requisitions/${f}`,
       decision: fm.decision || "pending",
       reportsTo: fm.reports_to || null,
+      hiringManager: fm.hiring_manager || null,
       manifest: null, version: null, reviews: [], questions: null,
       hired: false, state: null, round: 0, lastReview: null,
     };
@@ -81,8 +92,11 @@ export function readState() {
     r.reviews.push({
       file: `org/reviews/${f}`,
       verdict: fm.verdict || null,
+      dimension: fm.dimension || "form",
       version: fm.package_version || null,
       round: Number(fm.round || r.reviews.length + 1),
+      analysisBy: fm.analysis_by || null,
+      decidedBy: fm.decided_by || null,
     });
   }
 
@@ -99,11 +113,17 @@ export function readState() {
     r.round = last?.round || 0;
     // A verdict only counts for the version it was issued against: an old
     // "accepted" can never authorise a newer package.
-    const current = last && r.version && cmpVersion(r.version, last.version) === 0 ? last : null;
+    const forVersion = r.version
+      ? r.reviews.filter((v) => cmpVersion(r.version, v.version) === 0) : [];
+    const byDimension = {};
+    for (const v of forVersion) byDimension[v.dimension] = v;  // later rounds win
+    r.verdicts = byDimension;
+    r.missing = DIMENSIONS.filter((d) => !byDimension[d]);
+    const verdicts = DIMENSIONS.map((d) => byDimension[d]?.verdict);
     if (r.hired) r.state = "hired";
-    else if (current?.verdict === "accepted") r.state = "accepted";
-    else if (current?.verdict === "escalated") r.state = "escalated";
-    else if (current?.verdict === "changes_requested") r.state = "changes_requested";
+    else if (verdicts.includes("escalated")) r.state = "escalated";
+    else if (verdicts.includes("changes_requested")) r.state = "changes_requested";
+    else if (r.version && verdicts.every((v) => v === "accepted")) r.state = "accepted";
     else if (r.version) r.state = "review_pending";
     else if (r.decision === "declined") r.state = null;
     else if (r.decision === "approved") r.state = "requisition_approved";
@@ -162,7 +182,11 @@ export function pendingForFounder(state = readState()) {
     const base = { role: r.id, version: r.version, round: r.round };
     if (r.state === "requisition_pending") items.push({ ...base, kind: "decide_requisition", where: r.requisition });
     if (r.questions) items.push({ ...base, kind: "answer_questions", where: r.questions });
-    if (r.state === "review_pending") items.push({ ...base, kind: "review_package", where: `roles/${r.id}/` });
+    if (r.state === "review_pending")
+      for (const d of r.missing)
+        items.push({ ...base, kind: "review_package", dimension: d,
+          who: d === "substance" ? (r.hiringManager || "заказчик") : "форма",
+          where: `roles/${r.id}/` });
     if (r.state === "escalated") items.push({ ...base, kind: "escalation", where: r.lastReview.file });
     if (r.state === "accepted") items.push({ ...base, kind: "record_hire", where: "journal/" });
     if (r.state === "changes_requested" && r.round >= 3)

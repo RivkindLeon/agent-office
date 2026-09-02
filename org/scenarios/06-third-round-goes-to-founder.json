@@ -1,0 +1,53 @@
+{
+  "name": "Третий круг уходит к основателю, а не крутится дальше",
+  "why": "Два круга — работа, третий — спор или брак; решает основатель.",
+  "given": {
+    "requisitions": [
+      {
+        "role": "head-of-engineering",
+        "decision": "approved",
+        "hiring_manager": "founder",
+        "reports_to": "ceo"
+      }
+    ],
+    "roles": [
+      {
+        "role": "head-of-people",
+        "from": "head-of-people"
+      },
+      {
+        "role": "head-of-engineering",
+        "version": "3.0"
+      }
+    ],
+    "reviews": [
+      {
+        "role": "head-of-engineering",
+        "package_version": "3.0",
+        "round": 3,
+        "dimension": "form",
+        "verdict": "changes_requested",
+        "analysis_by": "head-of-people",
+        "read_by": "head-of-people",
+        "decided_by": "founder"
+      }
+    ],
+    "journal": [
+      {
+        "type": "hired",
+        "subject": "head-of-people"
+      }
+    ]
+  },
+  "expect": {
+    "states": {
+      "head-of-engineering": "changes_requested"
+    },
+    "tasks_empty": [
+      "head-of-people"
+    ],
+    "pending_kinds": [
+      "third_round"
+    ]
+  }
+}
