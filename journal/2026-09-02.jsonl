@@ -17,3 +17,4 @@
 {"ts":"2026-09-02T13:02:03.476Z","agent":{"id":"head-of-people","version":"4.0"},"type":"idle","summary":"Работы нет, модель не вызывалась","outcome":"idle"}
 {"ts":"2026-09-02T13:45:24.077Z","agent":{"id":"founder"},"type":"decision","subject":"head-of-people","summary":"Head of People стал агентом OpenClaw: модель и права выданы","detail_ref":"roles/head-of-people/PROFILE.md","outcome":"ok"}
 {"ts":"2026-09-02T13:45:24.166Z","agent":{"id":"founder"},"type":"approved","subject":"head-of-people","summary":"Пакет 5.0: модель gpt-5.6-luna, профиль coding, песочница","outcome":"ok"}
+{"ts":"2026-09-02T13:48:59.428Z","agent":{"id":"head-of-people","version":"5.0"},"type":"idle","summary":"Работы нет, модель не вызывалась","outcome":"idle"}
