@@ -21,6 +21,7 @@ export const TYPES = [
   "shift_start", "shift_end", "idle", "blocked",
   "requisition_filed", "package_created", "review", "returned", "approved",
   "hired", "role_review", "sanction", "self_review",
+  "test_red", "test_green",
   "decision", "ticket_created", "design_ready", "commit", "pr_opened",
   "ci_failed", "merge", "deploy", "handoff",
 ];

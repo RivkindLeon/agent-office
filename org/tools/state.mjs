@@ -224,11 +224,33 @@ const stepDone = (step, target) => {
   return false;  // "submit" and manual checks are never auto-satisfied
 };
 
+// A step can be a list rather than a single artefact: "one task per shift"
+// cannot be written out in advance, because the tasks are produced by an
+// earlier step. The manifest declares where to read them, the engine hands out
+// the first unfinished one.
+function pendingTask(step, target) {
+  const file = step.steps_from.file.replace("{target}", target);
+  let data;
+  try { data = JSON.parse(readFileSync(abs(file), "utf8")); } catch { return { missing: file }; }
+  const done = step.steps_from.done_status || "green";
+  const task = (data.tasks || []).find((t) => t.status !== done);
+  return task ? { task } : null;
+}
+
 /** The next unfinished step of a declared work type. */
 export function nextStep(self, workId, target) {
   const work = (self?.manifest?.work || []).find((w) => w.id === workId);
   const steps = work?.steps || DEFAULT_STEPS;
-  return steps.find((s) => !stepDone(s, target)) || null;
+  for (const step of steps) {
+    if (step.steps_from) {
+      const p = pendingTask(step, target);
+      if (p === null) continue;                       // every task is done
+      if (p.missing) return { ...step, missing: p.missing };
+      return { ...step, task: p.task };
+    }
+    if (!stepDone(step, target)) return step;
+  }
+  return null;
 }
 
 /** What the role must do on its own, without the founder. Structured: the
@@ -247,7 +269,7 @@ export function tasksFor(roleId, state = readState()) {
       const step = t.work ? nextStep(self, t.work, target) : null;
       tasks.push({ trigger: t.id, role: hit.id, target, requisition: hit.requisition,
         review: hit.lastReview?.file, version: hit.version, path: t.when.path,
-        work: t.work || null, step: step?.id || null,
+        work: t.work || null, step: step?.id || null, item: step?.task || null,
         artifact: step?.artifact?.replace("{target}", target) || null });
     }
   }

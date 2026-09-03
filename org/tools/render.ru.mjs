@@ -34,6 +34,8 @@ const STEPS_RU = {
   scope: "границы продукта",
   requirements: "требования с критериями приёмки",
   priorities: "приоритеты с основанием",
+  design: "технический дизайн: как строим, кода нет",
+  tasks: "разбивка на задачи: одна задача = одно поведение = один цикл красный-зелёный",
   draft: "черновик",
   "self-review": "перечитать как проверяющий",
 };
@@ -41,6 +43,12 @@ const STEPS_RU = {
 export const renderTask = (t) => {
   const base = (TASKS_RU[t.trigger] || ((x) => `${x.trigger} по ${x.role}`))(t);
   if (!t.step) return base;
+  if (t.item) {
+    const phase = t.item.status === "red"
+      ? "тест уже красный — напиши минимальный код, чтобы он позеленел"
+      : "напиши тест на это поведение и покажи, что он падает; кода не писать";
+    return `${base}\n  задача ${t.item.id} (${t.item.requirement}): ${t.item.behaviour}\n  ${phase}\n  одна задача за смену, следующая — только после зелёного`;
+  }
   const what = STEPS_RU[t.step] || t.step;
   return `${base}\n  шаг этой смены — ${what}${t.artifact ? ` (${t.artifact})` : ""}\n  один шаг за смену: остальное подождёт следующей`;
 };
