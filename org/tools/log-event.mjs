@@ -17,6 +17,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { appendFileSync, mkdirSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { ROOT } from "./state.mjs";
+import { TYPES } from "./validate-journal.mjs";
 
 const [id, type, summary] = process.argv.slice(2);
 if (!id || !type || !summary) {
@@ -45,6 +46,13 @@ let version;
 if (id !== "founder") {
   try { version = JSON.parse(readFileSync(join(ROOT, "roles", id, "manifest.json"), "utf8")).version; } catch {}
   if (!version) { console.error(`no version in roles/${id}/manifest.json`); process.exit(2); }
+}
+// Refuse an invented type at write time. The validator caught six events of a
+// made-up type only after they were already in the journal, and every shift
+// after that failed validation and refused to commit.
+if (!TYPES.includes(type)) {
+  console.error(`неизвестный тип события: ${type}\nдопустимые: ${TYPES.join(", ")}`);
+  process.exit(2);
 }
 if (summary.length > 80) { console.error(`summary longer than 80 chars (${summary.length})`); process.exit(2); }
 if (type === "handoff" && !opt("to")) { console.error("handoff without --to <role>"); process.exit(2); }

@@ -71,7 +71,8 @@ export function readProjects() {
   const out = [];
   for (const dir of (() => { try { return readdirSync(abs("projects")); } catch { return []; } })()) {
     const fm = readFrontMatter(abs(`projects/${dir}/BRIEF.md`));
-    if (fm) out.push({ id: dir, status: fm.status || "unknown", brief: `projects/${dir}/BRIEF.md` });
+    if (fm) out.push({ id: dir, status: fm.status || "unknown",
+      question: fm.question || null, brief: `projects/${dir}/BRIEF.md` });
   }
   return out;
 }
@@ -246,6 +247,8 @@ export function tasksFor(roleId, state = readState()) {
 export function pendingForFounder(state = readState()) {
   const items = [];
   for (const p of readProjects()) {
+    if (p.status === "question")
+      items.push({ kind: "answer_question", role: p.id, where: p.brief, question: p.question });
     if (p.status === "ready-for-review")
       items.push({ kind: "review_brief", role: p.id, where: p.brief });
     if (p.status === "ready-for-engineering"

@@ -1,0 +1,36 @@
+{
+  "name": "A question to the founder stops the loop instead of repeating it",
+  "why": "The role correctly refused to invent a user; without a state for that, six shifts asked the same question again.",
+  "given": {
+    "roles": [
+      {
+        "role": "head-of-product",
+        "from": "head-of-product"
+      }
+    ],
+    "assume_reviewed": [
+      "head-of-product"
+    ],
+    "projects": [
+      {
+        "project": "calculator",
+        "status": "question",
+        "question": "Кто целевой пользователь?"
+      }
+    ],
+    "journal": [
+      {
+        "type": "hired",
+        "subject": "head-of-product"
+      }
+    ]
+  },
+  "expect": {
+    "tasks_empty": [
+      "head-of-product"
+    ],
+    "pending_kinds": [
+      "answer_question"
+    ]
+  }
+}
