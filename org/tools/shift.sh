@@ -58,7 +58,18 @@ node org/tools/log-event.mjs $ROLE <тип> \"<что сделал>\" --subject 
   AGENT_OUT="$(timeout "$AGENT_TIMEOUT" "$OPENCLAW" agent --agent "$ROLE" --message "$PROMPT" 2>&1 | grep -v '^\[plugins\]' | tail -20)"
   RC=$?
   [[ $RC -eq 124 ]] && say "! сотрудник не уложился в ${AGENT_TIMEOUT}с, смена оборвана"
-  [[ $RC -ne 0 && $RC -ne 124 ]] && say "! вызов сотрудника завершился с кодом $RC"
+  if [[ $RC -ne 0 && $RC -ne 124 ]]; then
+    say "! вызов сотрудника завершился с кодом $RC"
+    say "$AGENT_OUT"
+    # Не пытаться дальше: второй проход и приёмка на неработающем сотруднике
+    # бессмысленны, а цикл смен будет биться об одно и то же по кругу.
+    node org/tools/log-event.mjs "$ROLE" blocked "Смена не состоялась: сотрудник не запустился" \
+      --outcome blocked >/dev/null 2>&1
+    "$OPENCLAW" message send --channel telegram --target "$CHAT" \
+      --message "Смена $ROLE не состоялась: сотрудник не запустился.
+$AGENT_OUT" >/dev/null 2>&1
+    exit 4
+  fi
   say "--- сотрудник сказал:"
   say "$AGENT_OUT"
 

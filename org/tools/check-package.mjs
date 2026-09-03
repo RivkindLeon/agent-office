@@ -65,7 +65,9 @@ const boundaries = ((read("BOUNDARIES.md") || "").match(/^\s*[-*]\s+\S/gm) || []
 check(3, "BOUNDARIES.md lists at least three boundaries", boundaries >= 3, `${boundaries}`);
 
 // 4. triggers are declarative and use known operations
-const OPS = ["role_state", "front_matter_equals", "file_exists"];
+// Keep in step with the OPS table in state.mjs: a trigger the engine knows but
+// the check does not is a package that can never be accepted.
+const OPS = ["role_state", "front_matter_equals", "file_exists", "project_status"];
 const badTriggers = (m.triggers || []).filter((t) => !t.id || !OPS.includes(t.when?.op));
 check(4, "triggers are declarative and use known operations",
   Array.isArray(m.triggers) && m.triggers.length > 0 && badTriggers.length === 0,

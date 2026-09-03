@@ -10,7 +10,9 @@
     "allow": [
       "roles/**",
       "org/reviews/**",
-      "journal/*.jsonl"
+      "journal/*.jsonl",
+      "org/INBOX.md",
+      "org/ORG.md"
     ],
     "deny": [
       "roles/head-of-people/CHARTER.md",
@@ -35,7 +37,9 @@
     "allow": [
       "projects/**",
       "roles/head-of-product/notes/**",
-      "journal/*.jsonl"
+      "journal/*.jsonl",
+      "org/INBOX.md",
+      "org/ORG.md"
     ],
     "deny": [
       "COMPANY.md",
@@ -50,7 +54,8 @@
       "projects/**",
       "roles/head-of-engineering/notes/**",
       "journal/*.jsonl",
-      "org/INBOX.md"
+      "org/INBOX.md",
+      "org/ORG.md"
     ],
     "deny": [
       "COMPANY.md",
