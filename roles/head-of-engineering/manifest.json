@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "role": "head-of-engineering",
+  "version": "1.0",
+  "reports_to": "ceo",
+  "grade": "senior",
+  "mode": "strict",
+  "model": {
+    "primary": "openai/gpt-5.6-luna",
+    "fallbacks": [
+      "openai/gpt-5.5"
+    ]
+  },
+  "tools_profile": "coding",
+  "budget_tokens": 150000,
+  "boundaries": [
+    "product_scope",
+    "requirements_scope",
+    "budget_priorities",
+    "hiring_roles",
+    "product_acceptance"
+  ],
+  "triggers": [
+    {
+      "id": "calculator-ready-for-engineering",
+      "when": {
+        "op": "front_matter_equals",
+        "path": "projects/calculator/BRIEF.md",
+        "key": "status",
+        "value": "ready-for-engineering"
+      },
+      "target": "calculator",
+      "work": "engineering"
+    }
+  ],
+  "work": [
+    {
+      "id": "engineering",
+      "target_from": "trigger",
+      "steps": [
+        {
+          "id": "design",
+          "artifact": "projects/{target}/DESIGN.md"
+        },
+        {
+          "id": "tasks",
+          "artifact": "projects/{target}/tasks.json"
+        },
+        {
+          "id": "task",
+          "steps_from": {
+            "file": "projects/{target}/tasks.json",
+            "done_status": "green"
+          }
+        },
+        {
+          "id": "submit",
+          "check": "status_ready_for_review"
+        }
+      ]
+    }
+  ]
+}
