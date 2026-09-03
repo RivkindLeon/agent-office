@@ -101,12 +101,14 @@ test("state is derived from manifests, front matter and the journal", () => {
   assert.ok(st["head-of-product"].state);
 });
 
-test("triggers are declarative and only fire for hired roles", () => {
+test("only hired roles produce work", () => {
+  // An invariant, not a snapshot: an earlier version of this test asserted that
+  // head-of-product had no work, and broke the day it was hired. Fixtures in
+  // org/scenarios cover the specific situations; here we assert the rule.
   const st = readState();
-  const hop = tasksFor("head-of-people", st);
-  if (st["head-of-product"].state === "changes_requested")
-    assert.ok(hop.some((t) => t.trigger === "revise-package"), "a return creates work for the hiring role");
-  assert.deepEqual(tasksFor("head-of-product", st), [], "a role that is not hired does not work");
+  for (const r of Object.values(st))
+    if (r.state !== "hired")
+      assert.deepEqual(tasksFor(r.id, st), [], `${r.id} is not hired but has work`);
 });
 
 test("no prose lives in the machine layer", () => {
