@@ -86,6 +86,8 @@ export function readState() {
   for (const f of list("org/reviews").filter((f) => f.endsWith(".md")).sort()) {
     const fm = readFrontMatter(abs(`org/reviews/${f}`));
     if (!fm) continue;
+    // A verdict for a package that was scrapped is history, not state.
+    if (fm.void === "true") continue;
     const r = roles[fm.role];
     if (!r) continue;
     if (fm.kind === "questions") { r.questions = `org/reviews/${f}`; continue; }
