@@ -101,16 +101,42 @@ check(8, "reviews declare verdict, dimension and who analysed vs who decided",
 check(9, "journal has an event about this work today",
   todayEvents.some((e) => e.agent?.id === role || e.subject === role));
 
-// 10. a returned package must come back with a higher version
+// 10. copied text: a package assembled by lifting sections from a neighbour
+// looks complete and says nothing about this role. Structural, language-free.
+const significant = (text) => (text || "").split("\n")
+  .map((l) => l.replace(/^\s*[-*>#\d.]+\s*/, "").trim())
+  .filter((l) => l.length >= 40);
+const mine = new Set(DOCS.flatMap((f) => significant(read(f))));
+let copied = [];
+for (const other of readdirSync(join(ROOT, "roles")).filter((d) => d !== role)) {
+  const theirs = new Set(DOCS.flatMap((f) => {
+    try { return significant(readFileSync(join(ROOT, "roles", other, f), "utf8")); }
+    catch { return []; }
+  }));
+  const shared = [...mine].filter((l) => theirs.has(l));
+  if (shared.length > copied.length) copied = shared.map((l) => `${other}: ${l.slice(0, 55)}`);
+}
+check(10, "no long passages copied from another package", copied.length <= 3,
+  copied.length ? `${copied.length} shared lines, e.g. ${copied[0]}` : "");
+
+// 11. a verdict must cite the repository, not just assert
+const uncited = reviews.filter((f) => {
+  const text = readFileSync(join(ROOT, "org/reviews", f), "utf8");
+  if (readFrontMatter(join(ROOT, "org/reviews", f))?.legacy === "true") return false;
+  return (text.match(/(roles|org|projects|journal|docs)\/[\w./-]+/g) || []).length < 3;
+});
+check(11, "reviews cite artefacts instead of only asserting", uncited.length === 0, uncited.join(", "));
+
+// 12. a returned package must come back with a higher version
 const state = readState()[role];
 const returned = (state?.reviews || []).filter((r) => r.verdict === "changes_requested").pop();
-if (!returned) check(10, "version after a return (no returns yet)", true);
+if (!returned) check(13, "version after a return (no returns yet)", true);
 else {
   const cmp = (a, b) => {
     const pa = String(a).split(".").map(Number), pb = String(b).split(".").map(Number);
     return pa[0] - pb[0] || pa[1] - pb[1];
   };
-  check(10, "version is higher than the one that was returned",
+  check(13, "version is higher than the one that was returned",
     cmp(m.version || "0.0", returned.version || "0.0") > 0,
     `now ${m.version}, returned ${returned.version}`);
 }

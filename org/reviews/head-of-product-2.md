@@ -8,7 +8,11 @@ dimension: form
 analysis_by: assistant
 read_by: assistant
 decided_by: founder
+legacy: true
 ---
+
+> Вынесен до правила о цитировании артефактов: пункты подтверждены
+> текстом разбора, а не ссылками. Помечен `legacy: true`.
 
 # Ревью: head-of-product, версия 1.0, круг 2
 

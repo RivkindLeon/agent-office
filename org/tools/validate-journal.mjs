@@ -47,6 +47,7 @@ export function validateEvent(e) {
   if ("schema_version" in e && e.schema_version !== 1) errs.push(`unknown schema_version: ${e.schema_version}`);
   if ("duration_ms" in e && (typeof e.duration_ms !== "number" || e.duration_ms < 0)) errs.push("duration_ms");
   if ("event_id" in e && !/^[0-9a-f-]{36}$/.test(e.event_id || "")) errs.push("event_id is not a uuid");
+  if ("findings" in e && (typeof e.findings !== "number" || e.findings < 0)) errs.push("findings is not a count");
   return errs;
 }
 

@@ -17,8 +17,32 @@ const TASKS_RU = {
   "office-needs-product": (t) => `наполнить продуктовый бриф ${t.path || "projects/office/BRIEF.md"}`,
 };
 
-export const renderTask = (t) =>
-  (TASKS_RU[t.trigger] || ((x) => `${x.trigger} по ${x.role}`))(t);
+// A shift gets one step, so the wording names the step, not the whole job.
+const STEPS_RU = {
+  boundaries: "границы должности",
+  charter: "устав: зачем должность существует",
+  io: "вход и выход: триггеры, артефакты, когда «сделано»",
+  manifest: "машинный манифест: версия, квалификация, триггеры, шаги работы",
+  comms: "связи: подчинение, эскалация, что решает сам",
+  acceptance: "критерии приёмки работы должности",
+  profile: "квалификация и обоснование грейда",
+  instructions: "рабочая инструкция",
+  submit: "сдать работу: прогнать проверки и отдать на ревью",
+  users: "кто пользователь",
+  problem: "какую проблему решаем",
+  scope: "границы продукта",
+  requirements: "требования с критериями приёмки",
+  priorities: "приоритеты с основанием",
+  draft: "черновик",
+  "self-review": "перечитать как проверяющий",
+};
+
+export const renderTask = (t) => {
+  const base = (TASKS_RU[t.trigger] || ((x) => `${x.trigger} по ${x.role}`))(t);
+  if (!t.step) return base;
+  const what = STEPS_RU[t.step] || t.step;
+  return `${base}\n  шаг этой смены — ${what}${t.artifact ? ` (${t.artifact})` : ""}\n  один шаг за смену: остальное подождёт следующей`;
+};
 
 export const STATE_RU = {
   requisition_pending: "заявка ждёт решения",

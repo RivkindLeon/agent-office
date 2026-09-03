@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "role": "head-of-people",
-  "version": "9.0",
+  "version": "10.0",
   "reports_to": "ceo",
   "grade": "middle",
   "mode": "strict",
@@ -20,7 +20,8 @@
         "op": "role_state",
         "scope": "others",
         "state": "requisition_approved"
-      }
+      },
+      "work": "package"
     },
     {
       "id": "revise-package",
@@ -29,7 +30,8 @@
         "scope": "others",
         "state": "changes_requested",
         "max_round": 2
-      }
+      },
+      "work": "package"
     },
     {
       "id": "record-hire",
@@ -38,6 +40,50 @@
         "scope": "others",
         "state": "accepted"
       }
+    }
+  ],
+  "work": [
+    {
+      "id": "package",
+      "target_from": "trigger",
+      "steps": [
+        {
+          "id": "boundaries",
+          "artifact": "roles/{target}/BOUNDARIES.md"
+        },
+        {
+          "id": "charter",
+          "artifact": "roles/{target}/CHARTER.md"
+        },
+        {
+          "id": "io",
+          "artifact": "roles/{target}/IO.md"
+        },
+        {
+          "id": "manifest",
+          "artifact": "roles/{target}/manifest.json"
+        },
+        {
+          "id": "comms",
+          "artifact": "roles/{target}/COMMS.md"
+        },
+        {
+          "id": "acceptance",
+          "artifact": "roles/{target}/ACCEPTANCE.md"
+        },
+        {
+          "id": "profile",
+          "artifact": "roles/{target}/PROFILE.md"
+        },
+        {
+          "id": "instructions",
+          "artifact": "roles/{target}/INSTRUCTIONS.md"
+        },
+        {
+          "id": "submit",
+          "check": "package_complete"
+        }
+      ]
     }
   ]
 }

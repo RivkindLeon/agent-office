@@ -1,0 +1,1 @@
+{"schema_version":1,"event_id":"bf935940-1402-4660-8623-3bb6b1783a73","run_id":null,"ts":"2026-09-03T05:36:38.026Z","agent":{"id":"founder"},"type":"decision","subject":"head-of-people","summary":"Один артефакт за смену; доказательства обязательны; счётчик находок","detail_ref":"docs/VALIDATION.md","outcome":"ok"}

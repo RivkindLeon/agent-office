@@ -68,6 +68,11 @@ const event = {
   ...(num("ms") !== undefined ? { duration_ms: num("ms") } : {}),
   ...(Object.keys(usage).length ? { usage } : {}),
   ...(opt("to") ? { handoff_to: opt("to") } : {}),
+  // How much the second pass found. Too many means the step was too big for
+  // one shift; a steady zero means it could be bigger. The company tunes its
+  // own step size from this number instead of guessing.
+  ...(num("findings") !== undefined ? { findings: num("findings") } : {}),
+  ...(opt("step") ? { step: opt("step") } : {}),
 };
 
 const day = event.ts.slice(0, 10);

@@ -158,6 +158,32 @@ const OPS = {
   },
 };
 
+// One shift produces one artifact, not a whole package. A big deliverable made
+// in a single pass is where an agent starts copying sections from a neighbour:
+// it is cheaper than holding eight documents in attention at once. The step is
+// derived, not tracked: the first declared step that is not done yet.
+const DEFAULT_STEPS = [
+  { id: "draft", check: "manual" },
+  { id: "self-review", check: "manual" },
+  { id: "submit", check: "manual" },
+];
+
+const stepDone = (step, target) => {
+  if (step.artifact) return existsSync(abs(step.artifact.replace("{target}", target)));
+  if (step.front_matter_step) {
+    const fm = readFrontMatter(abs(`projects/${target}/BRIEF.md`)) || {};
+    return String(fm.steps_done || "").split(/[,\s]+/).includes(step.front_matter_step);
+  }
+  return false;  // "submit" and manual checks are never auto-satisfied
+};
+
+/** The next unfinished step of a declared work type. */
+export function nextStep(self, workId, target) {
+  const work = (self?.manifest?.work || []).find((w) => w.id === workId);
+  const steps = work?.steps || DEFAULT_STEPS;
+  return steps.find((s) => !stepDone(s, target)) || null;
+}
+
 /** What the role must do on its own, without the founder. Structured: the
  * wording of a task is prose and lives in render.ru.mjs. */
 export function tasksFor(roleId, state = readState()) {
@@ -169,9 +195,14 @@ export function tasksFor(roleId, state = readState()) {
   for (const t of triggers) {
     const op = OPS[t.when?.op];
     if (!op) { tasks.push({ trigger: t.id, role: roleId, unknown: t.when?.op }); continue; }
-    for (const hit of op(t.when, self, state))
-      tasks.push({ trigger: t.id, role: hit.id, requisition: hit.requisition,
-        review: hit.lastReview?.file, version: hit.version, path: t.when.path });
+    for (const hit of op(t.when, self, state)) {
+      const target = t.target || hit.id;
+      const step = t.work ? nextStep(self, t.work, target) : null;
+      tasks.push({ trigger: t.id, role: hit.id, target, requisition: hit.requisition,
+        review: hit.lastReview?.file, version: hit.version, path: t.when.path,
+        work: t.work || null, step: step?.id || null,
+        artifact: step?.artifact?.replace("{target}", target) || null });
+    }
   }
   return tasks;
 }

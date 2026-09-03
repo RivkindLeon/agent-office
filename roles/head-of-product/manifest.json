@@ -21,7 +21,41 @@
         "path": "projects/office/BRIEF.md",
         "key": "status",
         "value": "needs-product"
-      }
+      },
+      "work": "brief",
+      "target": "office"
+    }
+  ],
+  "work": [
+    {
+      "id": "brief",
+      "target_from": "trigger",
+      "steps": [
+        {
+          "id": "users",
+          "front_matter_step": "users"
+        },
+        {
+          "id": "problem",
+          "front_matter_step": "problem"
+        },
+        {
+          "id": "scope",
+          "front_matter_step": "scope"
+        },
+        {
+          "id": "requirements",
+          "artifact": "projects/{target}/REQUIREMENTS.md"
+        },
+        {
+          "id": "priorities",
+          "front_matter_step": "priorities"
+        },
+        {
+          "id": "submit",
+          "check": "brief_complete"
+        }
+      ]
     }
   ]
 }
