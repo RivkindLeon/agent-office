@@ -31,6 +31,12 @@ function build(given) {
 
   for (const role of given.roles || []) {
     mkdirSync(join(root, "roles", role.role), { recursive: true });
+    // A fixture role owns a complete package unless the scenario is about a
+    // package still being built.
+    if (!role.incomplete)
+      for (const doc of ["CHARTER.md", "BOUNDARIES.md", "INSTRUCTIONS.md", "IO.md",
+                         "COMMS.md", "ACCEPTANCE.md", "PROFILE.md"])
+        writeFileSync(join(root, "roles", role.role, doc), `# ${role.role} ${doc}\n\n- a\n- b\n- c\n`);
     if (role.from) {
       cpSync(join(ROOT, "roles", role.from, "manifest.json"),
         join(root, "roles", role.role, "manifest.json"));

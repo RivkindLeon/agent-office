@@ -6,7 +6,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parseFrontMatter } from "./frontmatter.mjs";
@@ -111,8 +111,10 @@ test("triggers are declarative and only fire for hired roles", () => {
 
 test("no prose lives in the machine layer", () => {
   const cyrillic = /[\u0400-\u04FF]/;
-  for (const role of ["head-of-people", "head-of-product"]) {
-    const raw = readFileSync(join(ROOT, `roles/${role}/manifest.json`), "utf8");
+  for (const role of readdirSync(join(ROOT, "roles"))) {
+    const file = join(ROOT, `roles/${role}/manifest.json`);
+    if (!existsSync(file)) continue;   // a package still being built
+    const raw = readFileSync(file, "utf8");
     assert.equal(cyrillic.test(raw), false, `${role}/manifest.json contains prose`);
   }
   const policy = readFileSync(join(ROOT, "org/write-policy.json"), "utf8");

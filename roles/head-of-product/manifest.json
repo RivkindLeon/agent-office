@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "role": "head-of-product",
+  "version": "1.0",
+  "reports_to": "ceo",
+  "grade": "middle",
+  "mode": "strict",
+  "model": {
+    "primary": "openai/gpt-5.6-luna",
+    "fallbacks": [
+      "openai/gpt-5.5"
+    ]
+  },
+  "tools_profile": "coding",
+  "budget_tokens": 150000,
+  "triggers": [
+    {
+      "id": "office-needs-product",
+      "when": {
+        "op": "front_matter_equals",
+        "path": "projects/office/BRIEF.md",
+        "key": "status",
+        "value": "needs-product"
+      },
+      "work": "brief",
+      "target": "office"
+    }
+  ],
+  "work": [
+    {
+      "id": "brief",
+      "target_from": "trigger",
+      "steps": [
+        {
+          "id": "users",
+          "front_matter_step": "users"
+        },
+        {
+          "id": "problem",
+          "front_matter_step": "problem"
+        },
+        {
+          "id": "scope",
+          "front_matter_step": "scope"
+        },
+        {
+          "id": "requirements",
+          "artifact": "projects/{target}/REQUIREMENTS.md"
+        },
+        {
+          "id": "priorities",
+          "front_matter_step": "priorities"
+        },
+        {
+          "id": "submit",
+          "check": "brief_complete"
+        }
+      ]
+    }
+  ]
+}

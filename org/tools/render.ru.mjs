@@ -47,6 +47,7 @@ export const renderTask = (t) => {
 export const STATE_RU = {
   requisition_pending: "заявка ждёт решения",
   requisition_approved: "заявка одобрена, пакета нет",
+  package_draft: "пакет собирается",
   review_pending: "пакет ждёт ревью",
   changes_requested: "вернули на правки",
   escalated: "эскалация",
@@ -66,6 +67,9 @@ const ITEM_RU = {
   review_hired_package: (i) => [
     `**${i.role}** работает по непроверенной версии ${i.version} — нет вердикта «${i.dimension === "substance" ? "по существу" : "по форме"}»`,
     "прочитать пакет целиком и положить вердикт: сотрудник уже работает по этой инструкции"],
+  package_draft: (i) => [
+    `пакет **${i.role}** собирается: готово ${i.done} из ${i.total}, следующий — ${i.next}`,
+    "работа сотрудника, не твоя; строка исчезнет сама. Не исчезает — сборка встала"],
   escalation: (i) => [`эскалация по **${i.role}**`, "решить и закоммитить"],
   record_hire: (i) => [`**${i.role} ${i.version}** принят, но не нанят`, "записать событие hired"],
   third_round: (i) => [`третий круг по **${i.role}**`, "решить спор или признать брак"],

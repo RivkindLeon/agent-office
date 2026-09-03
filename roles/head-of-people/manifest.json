@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "role": "head-of-people",
-  "version": "10.0",
+  "version": "11.0",
   "reports_to": "ceo",
   "grade": "middle",
   "mode": "strict",
@@ -19,7 +19,10 @@
       "when": {
         "op": "role_state",
         "scope": "others",
-        "state": "requisition_approved"
+        "state": [
+          "requisition_approved",
+          "package_draft"
+        ]
       },
       "work": "package"
     },

@@ -8,7 +8,8 @@
 import { execFileSync } from "node:child_process";
 import { ROOT, readState } from "./state.mjs";
 
-const SKIP = new Set(["changes_requested", "requisition_pending", "requisition_approved", "escalated"]);
+const SKIP = new Set(["changes_requested", "requisition_pending", "requisition_approved",
+  "package_draft", "escalated"]);
 let bad = 0;
 
 for (const r of Object.values(readState())) {

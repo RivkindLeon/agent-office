@@ -23,9 +23,18 @@ const list = (p) => { try { return readdirSync(abs(p)); } catch { return []; } }
 const readJson = (p) => { try { return JSON.parse(readFileSync(abs(p), "utf8")); } catch { return null; } };
 
 /** Hiring states. This is a state machine, not a bag of flags. */
+// The canonical package. "Does a package exist" and "is it finished" are two
+// different questions: answering both with "is there a manifest" halted a run
+// half-way, because the manifest is itself one of the steps.
+export const PACKAGE_FILES = [
+  "CHARTER.md", "BOUNDARIES.md", "INSTRUCTIONS.md", "IO.md",
+  "COMMS.md", "ACCEPTANCE.md", "PROFILE.md", "manifest.json",
+];
+
 export const STATES = [
   "requisition_pending",   // requisition exists, founder has not decided
   "requisition_approved",  // approved, package not written yet
+  "package_draft",         // package under construction, steps still missing
   "review_pending",        // package exists, a verdict is missing for this version
   "changes_requested",     // some dimension returned the current version
   "escalated",             // some dimension escalated
@@ -80,6 +89,7 @@ export function readState() {
     roles[id] ??= { id, requisition: null, decision: "approved", reviews: [] };
     roles[id].manifest = manifest;
     roles[id].version = manifest?.version || null;
+    roles[id].missingFiles = PACKAGE_FILES.filter((f) => !existsSync(abs(`roles/${id}/${f}`)));
     roles[id].reportsTo ??= manifest?.reports_to || null;
   }
 
@@ -130,6 +140,7 @@ export function readState() {
     if (r.hired) r.state = "hired";
     else if (verdicts.includes("escalated")) r.state = "escalated";
     else if (verdicts.includes("changes_requested")) r.state = "changes_requested";
+    else if (r.version && (r.missingFiles || []).length) r.state = "package_draft";
     else if (r.version && verdicts.every((v) => v === "accepted")) r.state = "accepted";
     else if (r.version) r.state = "review_pending";
     else if (r.decision === "declined") r.state = null;
@@ -145,7 +156,8 @@ const OPS = {
     const hits = [];
     for (const r of Object.values(state)) {
       if ((cond.scope === "self") !== (r.id === self.id)) continue;
-      if (r.state !== cond.state) continue;
+      const wanted = Array.isArray(cond.state) ? cond.state : [cond.state];
+      if (!wanted.includes(r.state)) continue;
       if (cond.max_round && r.round > Number(cond.max_round)) continue;
       hits.push(r);
     }
@@ -222,6 +234,10 @@ export function pendingForFounder(state = readState()) {
         items.push({ ...base, kind: "review_package", dimension: d,
           who: d === "substance" ? (r.hiringManager || "заказчик") : "форма",
           where: `roles/${r.id}/` });
+    if (r.state === "package_draft")
+      items.push({ ...base, kind: "package_draft",
+        done: PACKAGE_FILES.length - r.missingFiles.length, total: PACKAGE_FILES.length,
+        next: r.missingFiles[0], where: `roles/${r.id}/` });
     if (r.state === "escalated") items.push({ ...base, kind: "escalation", where: r.lastReview.file });
     if (r.state === "accepted") items.push({ ...base, kind: "record_hire", where: "journal/" });
     if (r.state === "hired" && r.version && r.unreviewed.length)

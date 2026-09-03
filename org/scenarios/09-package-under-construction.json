@@ -1,0 +1,47 @@
+{
+  "name": "A package under construction keeps producing work",
+  "why": "The manifest is itself a step: creating it must not flip the role into review and strand the remaining steps.",
+  "given": {
+    "requisitions": [
+      {
+        "role": "head-of-engineering",
+        "decision": "approved",
+        "hiring_manager": "founder",
+        "reports_to": "ceo"
+      }
+    ],
+    "roles": [
+      {
+        "role": "head-of-people",
+        "from": "head-of-people"
+      },
+      {
+        "role": "head-of-engineering",
+        "version": "1.0",
+        "incomplete": true
+      }
+    ],
+    "assume_reviewed": [
+      "head-of-people"
+    ],
+    "journal": [
+      {
+        "type": "hired",
+        "subject": "head-of-people"
+      }
+    ]
+  },
+  "expect": {
+    "states": {
+      "head-of-engineering": "package_draft"
+    },
+    "tasks_contain": {
+      "head-of-people": [
+        "write-package"
+      ]
+    },
+    "pending_kinds": [
+      "package_draft"
+    ]
+  }
+}
