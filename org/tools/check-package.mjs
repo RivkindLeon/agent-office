@@ -138,7 +138,8 @@ else {
     const pa = String(a).split(".").map(Number), pb = String(b).split(".").map(Number);
     return pa[0] - pb[0] || pa[1] - pb[1];
   };
-  check(13, "version is higher than the one that was returned",
+  // A return means obligations or criteria changed: that is a major bump.
+  check(13, "major version is higher than the one that was returned",
     cmp(m.version || "0.0", returned.version || "0.0") > 0,
     `now ${m.version}, returned ${returned.version}`);
 }

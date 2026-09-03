@@ -1,0 +1,46 @@
+{
+  "name": "A minor version stays covered by the verdict on its major line",
+  "why": "Engine mechanics must not cost a re-read of the package; obligations always do.",
+  "given": {
+    "roles": [
+      {
+        "role": "head-of-product",
+        "from": "head-of-product"
+      }
+    ],
+    "reviews": [
+      {
+        "role": "head-of-product",
+        "package_version": "4.0",
+        "round": 1,
+        "dimension": "form",
+        "verdict": "accepted",
+        "analysis_by": "assistant",
+        "read_by": "founder",
+        "decided_by": "founder"
+      },
+      {
+        "role": "head-of-product",
+        "package_version": "4.0",
+        "round": 1,
+        "dimension": "substance",
+        "verdict": "accepted",
+        "analysis_by": "founder",
+        "read_by": "founder",
+        "decided_by": "founder"
+      }
+    ],
+    "journal": [
+      {
+        "type": "hired",
+        "subject": "head-of-product"
+      }
+    ]
+  },
+  "expect": {
+    "states": {
+      "head-of-product": "hired"
+    },
+    "pending_kinds": []
+  }
+}

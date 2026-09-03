@@ -49,6 +49,14 @@ export const STATES = [
 // them was the reason a recruiter was implicitly asked to grade engineering.
 export const DIMENSIONS = ["form", "substance"];
 
+// A verdict covers the whole major line. Mechanics of the engine - a predicate,
+// a renamed key, a fixed path - do not change what the role owes anyone, and
+// asking the founder to re-read a package for them buys nothing but ceremony.
+// Obligations, boundaries, acceptance criteria, grade and budget are major, and
+// those always come back for a verdict.
+export const majorOf = (v) => Number(String(v || "0").split(".")[0]);
+export const sameMajor = (a, b) => majorOf(a) === majorOf(b);
+
 const cmpVersion = (a, b) => {
   const pa = String(a || "0.0").split(".").map(Number);
   const pb = String(b || "0.0").split(".").map(Number);
@@ -137,7 +145,7 @@ export function readState() {
     // A verdict only counts for the version it was issued against: an old
     // "accepted" can never authorise a newer package.
     const forVersion = r.version
-      ? r.reviews.filter((v) => cmpVersion(r.version, v.version) === 0) : [];
+      ? r.reviews.filter((v) => sameMajor(r.version, v.version)) : [];
     const byDimension = {};
     for (const v of forVersion) byDimension[v.dimension] = v;  // later rounds win
     r.verdicts = byDimension;
