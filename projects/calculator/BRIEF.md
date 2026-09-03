@@ -1,7 +1,7 @@
 ---
 kind: brief
 project: calculator
-status: needs-product
+status: ready-for-review
 owner: head-of-product
 users: "Человек, которому нужно быстро выполнить простой арифметический расчёт без установки отдельного приложения"
 users_status: assumption
