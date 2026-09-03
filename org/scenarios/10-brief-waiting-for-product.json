@@ -1,0 +1,35 @@
+{
+  "name": "A brief that needs product creates work and nothing for the founder",
+  "why": "Product wakes up on status, not on a hardcoded project path.",
+  "given": {
+    "roles": [
+      {
+        "role": "head-of-product",
+        "from": "head-of-product"
+      }
+    ],
+    "assume_reviewed": [
+      "head-of-product"
+    ],
+    "projects": [
+      {
+        "project": "calculator",
+        "status": "needs-product"
+      }
+    ],
+    "journal": [
+      {
+        "type": "hired",
+        "subject": "head-of-product"
+      }
+    ]
+  },
+  "expect": {
+    "tasks_contain": {
+      "head-of-product": [
+        "brief-needs-product"
+      ]
+    },
+    "pending_kinds": []
+  }
+}

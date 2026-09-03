@@ -1,0 +1,35 @@
+{
+  "name": "An accepted brief with nobody to build it surfaces for the founder",
+  "why": "The company must not sit silently on work it cannot do.",
+  "given": {
+    "roles": [
+      {
+        "role": "head-of-product",
+        "from": "head-of-product"
+      }
+    ],
+    "assume_reviewed": [
+      "head-of-product"
+    ],
+    "projects": [
+      {
+        "project": "calculator",
+        "status": "ready-for-engineering"
+      }
+    ],
+    "journal": [
+      {
+        "type": "hired",
+        "subject": "head-of-product"
+      }
+    ]
+  },
+  "expect": {
+    "tasks_empty": [
+      "head-of-product"
+    ],
+    "pending_kinds": [
+      "no_doer"
+    ]
+  }
+}

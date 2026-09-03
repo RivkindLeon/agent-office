@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "role": "head-of-product",
-  "version": "2.0",
+  "version": "3.0",
   "reports_to": "ceo",
   "grade": "middle",
   "mode": "strict",
@@ -49,8 +49,8 @@
           "front_matter_step": "priorities"
         },
         {
-          "id": "submit",
-          "check": "brief_complete"
+          "id": "submit-brief",
+          "check": "status_ready_for_review"
         }
       ]
     }

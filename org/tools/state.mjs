@@ -66,6 +66,16 @@ export function readJournal() {
   return events;
 }
 
+/** Projects and the status of their brief: work has a lifecycle too. */
+export function readProjects() {
+  const out = [];
+  for (const dir of (() => { try { return readdirSync(abs("projects")); } catch { return []; } })()) {
+    const fm = readFrontMatter(abs(`projects/${dir}/BRIEF.md`));
+    if (fm) out.push({ id: dir, status: fm.status || "unknown", brief: `projects/${dir}/BRIEF.md` });
+  }
+  return out;
+}
+
 export function readState() {
   const roles = {};
   const journal = readJournal();
@@ -235,6 +245,13 @@ export function tasksFor(roleId, state = readState()) {
  * wording lives in render.ru.mjs so this file stays language-free. */
 export function pendingForFounder(state = readState()) {
   const items = [];
+  for (const p of readProjects()) {
+    if (p.status === "ready-for-review")
+      items.push({ kind: "review_brief", role: p.id, where: p.brief });
+    if (p.status === "ready-for-engineering"
+        && !Object.values(state).some((r) => r.state === "hired" && r.id.includes("engineering")))
+      items.push({ kind: "no_doer", role: p.id, where: p.brief });
+  }
   for (const r of Object.values(state)) {
     const base = { role: r.id, version: r.version, round: r.round };
     if (r.state === "requisition_pending") items.push({ ...base, kind: "decide_requisition", where: r.requisition });
