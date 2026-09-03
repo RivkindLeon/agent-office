@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "role": "head-of-product",
-  "version": "4.0",
+  "version": "4.1",
   "reports_to": "ceo",
   "grade": "middle",
   "mode": "strict",
@@ -30,15 +30,15 @@
       "steps": [
         {
           "id": "users",
-          "front_matter_step": "users"
+          "front_matter_key": "users"
         },
         {
           "id": "problem",
-          "front_matter_step": "problem"
+          "front_matter_key": "problem"
         },
         {
           "id": "scope",
-          "front_matter_step": "scope"
+          "front_matter_key": "scope"
         },
         {
           "id": "requirements",
@@ -46,7 +46,7 @@
         },
         {
           "id": "priorities",
-          "front_matter_step": "priorities"
+          "front_matter_key": "priorities"
         },
         {
           "id": "submit-brief",

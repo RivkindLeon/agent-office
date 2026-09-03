@@ -205,9 +205,13 @@ const DEFAULT_STEPS = [
 
 const stepDone = (step, target) => {
   if (step.artifact) return existsSync(abs(step.artifact.replace("{target}", target)));
-  if (step.front_matter_step) {
+  // Done means the artefact carries the answer, not that the worker said so.
+  // The previous predicate looked for a `steps_done` key nobody had ever told
+  // the agent about: it did the work correctly seven shifts in a row and the
+  // step never closed.
+  if (step.front_matter_key) {
     const fm = readFrontMatter(abs(`projects/${target}/BRIEF.md`)) || {};
-    return String(fm.steps_done || "").split(/[,\s]+/).includes(step.front_matter_step);
+    return Boolean((fm[step.front_matter_key] || "").trim());
   }
   return false;  // "submit" and manual checks are never auto-satisfied
 };
