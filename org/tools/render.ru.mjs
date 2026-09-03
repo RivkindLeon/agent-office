@@ -14,7 +14,7 @@ const TASKS_RU = {
   "write-package": (t) => `написать пакет должности ${t.role} — заявка одобрена, ${t.requisition}`,
   "revise-package": (t) => `круг правок по пакету ${t.role} — вердикт в ${t.review}, читать целиком`,
   "record-hire": (t) => `внести ${t.role} в org/ORG.md — вердикт «принято» на версию ${t.version}`,
-  "office-needs-product": (t) => `наполнить продуктовый бриф ${t.path || "projects/office/BRIEF.md"}`,
+  "brief-needs-product": (t) => `наполнить продуктовый бриф projects/${t.target}/BRIEF.md`,
 };
 
 // A shift gets one step, so the wording names the step, not the whole job.

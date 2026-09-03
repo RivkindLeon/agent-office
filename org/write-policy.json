@@ -44,5 +44,21 @@
       "org/founder-key.sha256",
       ".github/**"
     ]
+  },
+  "head-of-engineering": {
+    "allow": [
+      "projects/**",
+      "roles/head-of-engineering/notes/**",
+      "journal/*.jsonl",
+      "org/INBOX.md"
+    ],
+    "deny": [
+      "COMPANY.md",
+      "org/tools/**",
+      "org/write-policy.json",
+      "org/founder-key.sha256",
+      ".github/**",
+      "projects/*/BRIEF.md"
+    ]
   }
 }

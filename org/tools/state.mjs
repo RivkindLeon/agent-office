@@ -167,6 +167,16 @@ const OPS = {
     const fm = readFrontMatter(abs(cond.path));
     return fm && fm[cond.key] === cond.value ? [self] : [];
   },
+  // Any project whose brief carries the given status. Replaces a hardcoded
+  // path: a role must not need a new trigger for every new project.
+  project_status(cond, self) {
+    const hits = [];
+    for (const dir of (() => { try { return readdirSync(abs("projects")); } catch { return []; } })()) {
+      const fm = readFrontMatter(abs(`projects/${dir}/BRIEF.md`));
+      if (fm && fm.status === cond.status) hits.push({ ...self, project: dir });
+    }
+    return hits;
+  },
   file_exists(cond, self) {
     return existsSync(abs(cond.path)) ? [self] : [];
   },
@@ -210,7 +220,7 @@ export function tasksFor(roleId, state = readState()) {
     const op = OPS[t.when?.op];
     if (!op) { tasks.push({ trigger: t.id, role: roleId, unknown: t.when?.op }); continue; }
     for (const hit of op(t.when, self, state)) {
-      const target = t.target || hit.id;
+      const target = hit.project || t.target || hit.id;
       const step = t.work ? nextStep(self, t.work, target) : null;
       tasks.push({ trigger: t.id, role: hit.id, target, requisition: hit.requisition,
         review: hit.lastReview?.file, version: hit.version, path: t.when.path,

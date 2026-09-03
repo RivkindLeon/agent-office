@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "role": "head-of-product",
-  "version": "1.0",
+  "version": "2.0",
   "reports_to": "ceo",
   "grade": "middle",
   "mode": "strict",
@@ -15,15 +15,12 @@
   "budget_tokens": 150000,
   "triggers": [
     {
-      "id": "office-needs-product",
+      "id": "brief-needs-product",
       "when": {
-        "op": "front_matter_equals",
-        "path": "projects/office/BRIEF.md",
-        "key": "status",
-        "value": "needs-product"
+        "op": "project_status",
+        "status": "needs-product"
       },
-      "work": "brief",
-      "target": "office"
+      "work": "brief"
     }
   ],
   "work": [
