@@ -1,0 +1,36 @@
+command: npm test
+exit_code: 1
+
+> calculator@1.0.0 test
+> playwright test
+
+
+Running 2 tests using 1 worker
+
+(node:3773682) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/calculator.spec.js:3:1 › adds two finite numbers (306ms)
+  ✘  2 tests/calculator.spec.js:16:1 › subtracts two finite numbers (52ms)
+
+
+  1) tests/calculator.spec.js:16:1 › subtracts two finite numbers ─────────────────
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 3
+    Received: undefined
+
+      23 |
+      24 |   for (const { left, right, expected } of examples) {
+    > 25 |     expect(calculate(left, right, "subtract")).toBe(expected);
+         |                                                ^
+      26 |   }
+      27 | });
+      28 |
+        at /home/claw/projects/agent-office/projects/calculator/tests/calculator.spec.js:25:48
+
+    Error Context: test-results/tests-calculator-subtracts-two-finite-numbers/error-context.md
+
+  1 failed
+    tests/calculator.spec.js:16:1 › subtracts two finite numbers ──────────────────
+  1 passed (2.0s)
