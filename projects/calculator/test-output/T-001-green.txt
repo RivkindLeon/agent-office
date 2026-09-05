@@ -1,0 +1,14 @@
+command: npm test
+exit_code: 0
+
+> calculator@1.0.0 test
+> playwright test
+
+
+Running 1 test using 1 worker
+
+(node:3771938) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/calculator.spec.js:3:1 › adds two finite numbers (342ms)
+
+  1 passed (2.1s)
