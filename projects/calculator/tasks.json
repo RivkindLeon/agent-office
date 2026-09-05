@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "project": "calculator",
+  "tasks": [
+    {
+      "id": "T-001",
+      "requirement": "REQ-001",
+      "behaviour": "сложение двух конечных чисел даёт математически корректный результат",
+      "test": "tests/calculator.spec.js",
+      "test_name": "adds two finite numbers",
+      "status": "todo"
+    },
+    {
+      "id": "T-002",
+      "requirement": "REQ-001",
+      "behaviour": "вычитание двух конечных чисел даёт математически корректный результат",
+      "test": "tests/calculator.spec.js",
+      "test_name": "subtracts two finite numbers",
+      "status": "todo"
+    },
+    {
+      "id": "T-003",
+      "requirement": "REQ-001",
+      "behaviour": "умножение двух конечных чисел даёт математически корректный результат",
+      "test": "tests/calculator.spec.js",
+      "test_name": "multiplies two finite numbers",
+      "status": "todo"
+    },
+    {
+      "id": "T-004",
+      "requirement": "REQ-001",
+      "behaviour": "деление двух конечных чисел с ненулевым знаменателем даёт математически корректный результат",
+      "test": "tests/calculator.spec.js",
+      "test_name": "divides two finite numbers with a non-zero divisor",
+      "status": "todo"
+    },
+    {
+      "id": "T-005",
+      "requirement": "REQ-002",
+      "behaviour": "после успешного расчёта полученный результат виден пользователю",
+      "test": "tests/result.spec.js",
+      "test_name": "shows the result after a successful calculation",
+      "status": "todo"
+    }
+  ]
+}
