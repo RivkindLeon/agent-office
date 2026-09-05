@@ -8,7 +8,9 @@
       "behaviour": "сложение двух конечных чисел даёт математически корректный результат",
       "test": "tests/calculator.spec.js",
       "test_name": "adds two finite numbers",
-      "status": "todo"
+      "assumption": "Допущение: вычислительный модуль экспортирует calculate(left, right, operation), а сложение выбирается значением add, проверить при приёмке",
+      "red_result": "test-output/T-001-red.txt",
+      "status": "red"
     },
     {
       "id": "T-002",
