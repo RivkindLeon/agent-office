@@ -16,7 +16,11 @@ set -uo pipefail
 cd "$(dirname "$0")/../.." || exit 1
 
 ROLE="${1:-head-of-people}"
-CHAT="${FOUNDER_CHAT:-482381149}"
+# Куда слать отчёт. Идентификатор чата - операционные данные развёртывания, а
+# не документ компании: в публичном репозитории ему не место. Живёт в
+# ~/.agent-office/telegram-chat или в переменной окружения cron-джоба.
+CHAT="${FOUNDER_CHAT:-$(cat "$HOME/.agent-office/telegram-chat" 2>/dev/null)}"
+if [[ -z "$CHAT" ]]; then echo "! не задан чат для отчёта: ~/.agent-office/telegram-chat"; fi
 AGENT_TIMEOUT="${AGENT_TIMEOUT:-600}"
 export RUN_ID="run-$(date -u +%Y%m%dT%H%M%SZ)-$ROLE"
 # The founder's secret must never reach the employee's environment: a shift

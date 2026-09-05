@@ -9,13 +9,14 @@
 |---|---|---|---|---|
 | Основатель | — | — | — | Leon, человек; вне оргструктуры |
 | CEO | — | — | — | исполняет основатель |
-| head-of-engineering | ceo | `roles/head-of-engineering/` | 2.0 | нанят |
 | head-of-people | ceo | `roles/head-of-people/` | 11.0 | нанят |
 | head-of-product | ceo | `roles/head-of-product/` | 4.1 | нанят |
 
 ## В работе
 
-Ничего.
+| Должность | Состояние | Версия | Круг |
+|---|---|---|---|
+| head-of-engineering | заявка одобрена, пакета нет | — | — |
 
 ## Пока сознательно не нанимаем
 
