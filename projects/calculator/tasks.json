@@ -21,7 +21,8 @@
       "test_name": "subtracts two finite numbers",
       "assumption": "Допущение: вычитание выбирается значением operation = subtract в существующем интерфейсе calculate, проверить при приёмке",
       "red_result": "test-output/T-002-red.txt",
-      "status": "red"
+      "green_result": "test-output/T-002-green.txt",
+      "status": "green"
     },
     {
       "id": "T-003",
