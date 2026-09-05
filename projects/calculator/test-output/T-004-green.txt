@@ -1,0 +1,17 @@
+command: npm test
+exit_code: 0
+
+> calculator@1.0.0 test
+> playwright test
+
+
+Running 4 tests using 1 worker
+
+(node:3792196) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/calculator.spec.js:3:1 › adds two finite numbers (857ms)
+  ✓  2 tests/calculator.spec.js:16:1 › subtracts two finite numbers (68ms)
+  ✓  3 tests/calculator.spec.js:29:1 › multiplies two finite numbers (36ms)
+  ✓  4 tests/calculator.spec.js:42:1 › divides two finite numbers with a non-zero divisor (21ms)
+
+  4 passed (3.6s)

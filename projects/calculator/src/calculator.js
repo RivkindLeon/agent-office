@@ -8,4 +8,7 @@ export function calculate(left, right, operation) {
   if (operation === "multiply") {
     return left * right;
   }
+  if (operation === "divide") {
+    return left / right;
+  }
 }
