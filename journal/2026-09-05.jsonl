@@ -1,0 +1,1 @@
+{"schema_version":1,"event_id":"c65b0f3e-08bb-41ba-a70b-aaf500a5e4ec","run_id":null,"ts":"2026-09-05T09:10:47.919Z","agent":{"id":"founder"},"type":"review","subject":"head-of-engineering","summary":"Пакет инженера возвращён: триггер на один проект, модель не под код","detail_ref":"org/reviews/head-of-engineering-1_0-substance.md","outcome":"ok"}
