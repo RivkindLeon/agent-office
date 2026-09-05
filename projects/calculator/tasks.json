@@ -41,7 +41,9 @@
       "behaviour": "деление двух конечных чисел с ненулевым знаменателем даёт математически корректный результат",
       "test": "tests/calculator.spec.js",
       "test_name": "divides two finite numbers with a non-zero divisor",
-      "status": "todo"
+      "assumption": "Допущение: деление выбирается значением operation = divide в существующем интерфейсе calculate, проверить при приёмке",
+      "red_result": "test-output/T-004-red.txt",
+      "status": "red"
     },
     {
       "id": "T-005",

@@ -1,0 +1,38 @@
+command: npm test
+exit_code: 1
+
+> calculator@1.0.0 test
+> playwright test
+
+
+Running 4 tests using 1 worker
+
+(node:3790722) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/calculator.spec.js:3:1 › adds two finite numbers (318ms)
+  ✓  2 tests/calculator.spec.js:16:1 › subtracts two finite numbers (52ms)
+  ✓  3 tests/calculator.spec.js:29:1 › multiplies two finite numbers (21ms)
+  ✘  4 tests/calculator.spec.js:42:1 › divides two finite numbers with a non-zero divisor (17ms)
+
+
+  1) tests/calculator.spec.js:42:1 › divides two finite numbers with a non-zero divisor ────────────
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 3
+    Received: undefined
+
+      49 |
+      50 |   for (const { left, right, expected } of examples) {
+    > 51 |     expect(calculate(left, right, "divide")).toBe(expected);
+         |                                              ^
+      52 |   }
+      53 | });
+      54 |
+        at /home/claw/projects/agent-office/projects/calculator/tests/calculator.spec.js:51:46
+
+    Error Context: test-results/tests-calculator-divides-t-6bce2-ers-with-a-non-zero-divisor/error-context.md
+
+  1 failed
+    tests/calculator.spec.js:42:1 › divides two finite numbers with a non-zero divisor ─────────────
+  3 passed (2.2s)

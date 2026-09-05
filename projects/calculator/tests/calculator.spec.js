@@ -38,3 +38,16 @@ test("multiplies two finite numbers", async () => {
     expect(calculate(left, right, "multiply")).toBe(expected);
   }
 });
+
+test("divides two finite numbers with a non-zero divisor", async () => {
+  const { calculate } = await import("../src/calculator.js");
+  const examples = [
+    { left: 12, right: 4, expected: 3 },
+    { left: -7, right: 2, expected: -3.5 },
+    { left: 1.5, right: -0.5, expected: -3 },
+  ];
+
+  for (const { left, right, expected } of examples) {
+    expect(calculate(left, right, "divide")).toBe(expected);
+  }
+});
