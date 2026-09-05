@@ -1,0 +1,23 @@
+command: npm test
+exit_code: 0
+
+> calculator@1.0.0 test
+> playwright test
+
+[WebServer] (node:3800086) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3800099) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3800099) [DEP0066] DeprecationWarning: OutgoingMessage.prototype._headers is deprecated
+
+Running 5 tests using 1 worker
+
+(node:3800111) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/calculator.spec.js:3:1 › adds two finite numbers (344ms)
+  ✓  2 tests/calculator.spec.js:16:1 › subtracts two finite numbers (64ms)
+  ✓  3 tests/calculator.spec.js:29:1 › multiplies two finite numbers (24ms)
+  ✓  4 tests/calculator.spec.js:42:1 › divides two finite numbers with a non-zero divisor (20ms)
+  ✓  5 tests/result.spec.js:3:1 › shows the result after a successful calculation (1.5s)
+
+  5 passed (6.3s)

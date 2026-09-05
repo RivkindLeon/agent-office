@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Калькулятор</title>
+  </head>
+  <body>
+    <main>
+      <h1>Калькулятор</h1>
+      <form id="calculator">
+        <label for="left">Первое число</label>
+        <input id="left" type="number" step="any" required>
+
+        <label for="operation">Операция</label>
+        <select id="operation">
+          <option value="add">+</option>
+          <option value="subtract">−</option>
+          <option value="multiply">×</option>
+          <option value="divide">÷</option>
+        </select>
+
+        <label for="right">Второе число</label>
+        <input id="right" type="number" step="any" required>
+
+        <button id="calculate" type="submit">Рассчитать</button>
+      </form>
+      <output id="result" aria-live="polite"></output>
+    </main>
+    <script type="module" src="src/app.js"></script>
+  </body>
+</html>

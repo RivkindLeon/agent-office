@@ -54,7 +54,8 @@
       "test_name": "shows the result after a successful calculation",
       "assumption": "Допущение: элементы формы имеют ID left, operation, right и calculate, а видимый результат выводится в элемент с ID result, проверить при приёмке",
       "red_result": "test-output/T-005-red.txt",
-      "status": "red"
+      "green_result": "test-output/T-005-green.txt",
+      "status": "green"
     }
   ]
 }
