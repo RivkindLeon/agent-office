@@ -32,7 +32,8 @@
       "test_name": "multiplies two finite numbers",
       "assumption": "Допущение: умножение выбирается значением operation = multiply в существующем интерфейсе calculate, проверить при приёмке",
       "red_result": "test-output/T-003-red.txt",
-      "status": "red"
+      "green_result": "test-output/T-003-green.txt",
+      "status": "green"
     },
     {
       "id": "T-004",
