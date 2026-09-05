@@ -91,6 +91,8 @@ const ITEM_RU = {
   third_round: (i) => [`третий круг по **${i.role}**`, "решить спор или признать брак"],
 };
 
+export const renderItem = (i) => (ITEM_RU[i.kind] || (() => [i.kind, ""]))(i);
+
 export function renderInboxBody(items) {
   if (!items.length) return "Ничего не ждёт. Компания работает сама.";
   return items.map((i, n) => {

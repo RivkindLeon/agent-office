@@ -136,16 +136,13 @@ PENDING=0
 [[ "$INBOX" == *"Ничего не ждёт"* ]] || PENDING=1
 
 if [[ "$WORK" == "1" || "$PENDING" == "1" || "$OUT" == *"!"* ]]; then
-  MSG="Смена $(date +%F), $ROLE
-
-По словам сотрудника — ниже его ответ; что подтверждено машиной, отмечено
-отдельно строками проверок. Слова сотрудника фактом не считаются.
-
-$OUT
-Ждёт тебя:
-$INBOX
-
-github.com/RivkindLeon/agent-office"
+  COMMIT="$(git rev-parse --short HEAD 2>/dev/null)"
+  MSG="$(node org/tools/report.mjs --role "$ROLE" \
+    --did "$AGENT_OUT" \
+    ${FINDINGS:+--findings "$FINDINGS"} \
+    --checks "$([[ "$GREEN" == "1" ]] && echo ok || echo failed)" \
+    ${GREEN:+--commit "$COMMIT"} \
+    --problems "$(printf '%s' "$OUT" | grep '^!' || true)")"
   "$OPENCLAW" message send --channel telegram --target "$CHAT" --message "$MSG" >/dev/null 2>&1 \
-    || echo "! Telegram report was not delivered"
+    || echo "! отчёт в Telegram не ушёл"
 fi

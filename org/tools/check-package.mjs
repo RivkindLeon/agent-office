@@ -99,8 +99,11 @@ const badReviews = reviews.filter((f) => {
 check(8, "reviews declare verdict, dimension and who analysed vs who decided",
   badReviews.length === 0, badReviews.join(", "));
 
-// 9. the shift left a trace
-check(9, "journal has an event about this work today",
+// 9. the shift left a trace. Only meaningful for the role that is working right
+// now: as a package invariant it declared every idle employee unacceptable.
+// Enabled by --shift, which only shift.sh passes.
+if (process.argv.includes("--shift"))
+  check(9, "journal has an event about this work today",
   todayEvents.some((e) => e.agent?.id === role || e.subject === role));
 
 // 10. copied text: a package assembled by lifting sections from a neighbour

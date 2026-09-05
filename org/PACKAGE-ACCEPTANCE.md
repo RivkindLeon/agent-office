@@ -21,7 +21,7 @@
    модель, профиль инструментов и бюджет.
 3. В `BOUNDARIES.md` не меньше трёх границ.
 4. Триггеры декларативны и используют операции из закрытого списка:
-   `role_state`, `front_matter_equals`, `file_exists`.
+   `role_state`, `front_matter_equals`, `file_exists`, `project_status`.
 5. В `ACCEPTANCE.md` не меньше трёх пунктов.
 6. Суммарный объём пакета — не больше 1200 строк.
 7. `COMPANY.md` не изменён — либо изменён основателем по событию `sanction`.
