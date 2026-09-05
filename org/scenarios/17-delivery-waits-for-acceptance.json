@@ -1,0 +1,41 @@
+{
+  "name": "Finished work waits for the founder instead of looping",
+  "why": "The engineer cannot change the brief status, so without a delivery artefact the trigger fires forever.",
+  "given": {
+    "roles": [
+      {
+        "role": "head-of-engineering",
+        "from": "head-of-engineering"
+      }
+    ],
+    "assume_reviewed": [
+      "head-of-engineering"
+    ],
+    "projects": [
+      {
+        "project": "calculator",
+        "status": "ready-for-engineering"
+      }
+    ],
+    "deliveries": [
+      {
+        "project": "calculator",
+        "status": "ready-for-acceptance"
+      }
+    ],
+    "journal": [
+      {
+        "type": "hired",
+        "subject": "head-of-engineering"
+      }
+    ]
+  },
+  "expect": {
+    "tasks_empty": [
+      "head-of-engineering"
+    ],
+    "pending_kinds": [
+      "accept_delivery"
+    ]
+  }
+}

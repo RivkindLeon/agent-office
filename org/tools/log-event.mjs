@@ -31,7 +31,12 @@ const opt = (name, def) => {
 };
 const num = (name) => { const v = opt(name); return v === undefined ? undefined : Number(v); };
 
-const privileged = id === "founder" || type === "sanction";
+// Authority belongs to the event type, not to the name the caller types in.
+// Before this, any role could write `hired` about itself and the reducer
+// believed it: the whole "only the founder decides" contour rested on agents
+// not trying.
+export const FOUNDER_ONLY_TYPES = ["sanction", "hired", "approved", "decision"];
+const privileged = id === "founder" || FOUNDER_ONLY_TYPES.includes(type);
 if (privileged) {
   let expected = "";
   try { expected = readFileSync(join(ROOT, "org", "founder-key.sha256"), "utf8").trim(); } catch {}

@@ -1,0 +1,33 @@
+{
+  "name": "A role that writes its own hire event stays unhired",
+  "why": "Authority is the founder's; the reducer used to believe whoever wrote the line.",
+  "given": {
+    "roles": [
+      {
+        "role": "head-of-people",
+        "from": "head-of-people"
+      }
+    ],
+    "assume_reviewed": [
+      "head-of-people"
+    ],
+    "journal": [
+      {
+        "type": "hired",
+        "subject": "head-of-people",
+        "agent": "head-of-people"
+      }
+    ]
+  },
+  "expect": {
+    "states": {
+      "head-of-people": "accepted"
+    },
+    "tasks_empty": [
+      "head-of-people"
+    ],
+    "pending_kinds": [
+      "record_hire"
+    ]
+  }
+}

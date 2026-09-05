@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "role": "head-of-engineering",
-  "version": "2.0",
+  "version": "3.0",
   "reports_to": "ceo",
   "grade": "senior",
   "mode": "strict",
@@ -25,7 +25,8 @@
       "id": "project-ready-for-engineering",
       "when": {
         "op": "project_status",
-        "status": "ready-for-engineering"
+        "status": "ready-for-engineering",
+        "without_file": "projects/{target}/DELIVERY.md"
       },
       "work": "engineering"
     }
@@ -51,8 +52,8 @@
           }
         },
         {
-          "id": "submit",
-          "check": "status_ready_for_review"
+          "id": "submit-delivery",
+          "artifact": "projects/{target}/DELIVERY.md"
         }
       ]
     }

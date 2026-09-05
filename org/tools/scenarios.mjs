@@ -73,6 +73,12 @@ function build(given) {
       frontMatter({ kind: "brief", ...pr }) + "\n# Бриф\n");
   }
 
+  for (const d of given.deliveries || []) {
+    mkdirSync(join(root, "projects", d.project), { recursive: true });
+    writeFileSync(join(root, "projects", d.project, "DELIVERY.md"),
+      frontMatter({ kind: "delivery", ...d }) + "\n# Сдача\n");
+  }
+
   if ((given.journal || []).length) {
     const lines = given.journal.map((e, i) => JSON.stringify({
       schema_version: 1, event_id: `00000000-0000-4000-8000-00000000000${i}`,

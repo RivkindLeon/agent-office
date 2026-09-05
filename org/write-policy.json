@@ -15,12 +15,7 @@
       "org/ORG.md"
     ],
     "deny": [
-      "roles/head-of-people/CHARTER.md",
-      "roles/head-of-people/INSTRUCTIONS.md",
-      "roles/head-of-people/IO.md",
-      "roles/head-of-people/COMMS.md",
-      "roles/head-of-people/ACCEPTANCE.md",
-      "roles/head-of-people/PROFILE.md",
+      "roles/head-of-people/*",
       "COMPANY.md",
       "org/HIRING.md",
       "org/PACKAGE-ACCEPTANCE.md",
@@ -42,6 +37,7 @@
       "org/ORG.md"
     ],
     "deny": [
+      "roles/head-of-product/*",
       "COMPANY.md",
       "org/tools/**",
       "org/write-policy.json",
@@ -58,6 +54,7 @@
       "org/ORG.md"
     ],
     "deny": [
+      "roles/head-of-engineering/*",
       "COMPANY.md",
       "org/tools/**",
       "org/write-policy.json",

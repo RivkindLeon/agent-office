@@ -79,8 +79,12 @@ export function readProjects() {
   const out = [];
   for (const dir of (() => { try { return readdirSync(abs("projects")); } catch { return []; } })()) {
     const fm = readFrontMatter(abs(`projects/${dir}/BRIEF.md`));
-    if (fm) out.push({ id: dir, status: fm.status || "unknown",
-      question: fm.question || null, brief: `projects/${dir}/BRIEF.md` });
+    if (!fm) continue;
+    const delivery = readFrontMatter(abs(`projects/${dir}/DELIVERY.md`));
+    out.push({ id: dir, status: fm.status || "unknown", question: fm.question || null,
+      brief: `projects/${dir}/BRIEF.md`,
+      delivery: delivery ? `projects/${dir}/DELIVERY.md` : null,
+      deliveryStatus: delivery?.status || null });
   }
   return out;
 }
@@ -117,6 +121,9 @@ export function readState() {
     if (!fm) continue;
     // A verdict for a package that was scrapped is history, not state.
     if (fm.void === "true") continue;
+    // Nobody accepts their own work. The two dimensions exist precisely so that
+    // two different people look; a self-signed verdict is neither.
+    if (fm.decided_by && fm.decided_by === fm.role) continue;
     const r = roles[fm.role];
     if (!r) continue;
     if (fm.kind === "questions") { r.questions = `org/reviews/${f}`; continue; }
@@ -135,7 +142,8 @@ export function readState() {
   // Reading it from the journal rather than from prose removes a whole class
   // of drift: the org chart becomes a rendering, not a source.
   for (const e of journal)
-    if (e.type === "hired" && roles[e.subject]) roles[e.subject].hired = true;
+    if (e.type === "hired" && e.agent?.id === "founder" && roles[e.subject])
+      roles[e.subject].hired = true;
 
   for (const r of Object.values(roles)) {
     r.reviews.sort((a, b) => a.round - b.round);
@@ -192,7 +200,11 @@ const OPS = {
     const hits = [];
     for (const dir of (() => { try { return readdirSync(abs("projects")); } catch { return []; } })()) {
       const fm = readFrontMatter(abs(`projects/${dir}/BRIEF.md`));
-      if (fm && fm.status === cond.status) hits.push({ ...self, project: dir });
+      if (!fm || fm.status !== cond.status) continue;
+      // Работа, уже сданная, не выдаётся снова: без этого исполнитель крутится
+      // на проекте вечно, потому что статус брифа меняет не он.
+      if (cond.without_file && existsSync(abs(cond.without_file.replace("{target}", dir)))) continue;
+      hits.push({ ...self, project: dir });
     }
     return hits;
   },
@@ -257,6 +269,10 @@ export function nextStep(self, workId, target) {
  * wording of a task is prose and lives in render.ru.mjs. */
 export function tasksFor(roleId, state = readState()) {
   const self = state[roleId];
+  // A package that is written, or even accepted, is not an employee. Only a
+  // hire - which only the founder can record - starts work. The invariant was
+  // asserted in tests and documented, but never enforced here.
+  if (self?.state !== "hired") return [];
   // A role that has not been hired does not work, whatever its triggers say.
   if (self?.state !== "hired") return [];
   const triggers = self?.manifest?.triggers || [];
@@ -285,7 +301,9 @@ export function pendingForFounder(state = readState()) {
       items.push({ kind: "answer_question", role: p.id, where: p.brief, question: p.question });
     if (p.status === "ready-for-review")
       items.push({ kind: "review_brief", role: p.id, where: p.brief });
-    if (p.status === "ready-for-engineering"
+    if (p.deliveryStatus === "ready-for-acceptance")
+      items.push({ kind: "accept_delivery", role: p.id, where: p.delivery });
+    if (p.status === "ready-for-engineering" && !p.delivery
         && !Object.values(state).some((r) => r.state === "hired" && r.id.includes("engineering")))
       items.push({ kind: "no_doer", role: p.id, where: p.brief });
   }

@@ -1,0 +1,56 @@
+{
+  "name": "A verdict signed by the role itself does not count",
+  "why": "Two dimensions exist so that two different people look at the work.",
+  "given": {
+    "roles": [
+      {
+        "role": "head-of-people",
+        "from": "head-of-people"
+      },
+      {
+        "role": "head-of-engineering",
+        "version": "1.0"
+      }
+    ],
+    "assume_reviewed": [
+      "head-of-people"
+    ],
+    "reviews": [
+      {
+        "role": "head-of-engineering",
+        "package_version": "1.0",
+        "round": 1,
+        "dimension": "form",
+        "verdict": "accepted",
+        "analysis_by": "head-of-engineering",
+        "read_by": "head-of-engineering",
+        "decided_by": "head-of-engineering"
+      },
+      {
+        "role": "head-of-engineering",
+        "package_version": "1.0",
+        "round": 1,
+        "dimension": "substance",
+        "verdict": "accepted",
+        "analysis_by": "head-of-engineering",
+        "read_by": "head-of-engineering",
+        "decided_by": "head-of-engineering"
+      }
+    ],
+    "journal": [
+      {
+        "type": "hired",
+        "subject": "head-of-people"
+      }
+    ]
+  },
+  "expect": {
+    "states": {
+      "head-of-engineering": "review_pending"
+    },
+    "pending_dimensions": [
+      "form",
+      "substance"
+    ]
+  }
+}

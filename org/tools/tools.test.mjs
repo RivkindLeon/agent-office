@@ -111,6 +111,25 @@ test("only hired roles produce work", () => {
       assert.deepEqual(tasksFor(r.id, st), [], `${r.id} is not hired but has work`);
 });
 
+test("a role cannot hire itself: privileged types need the token", () => {
+  const tmp = mkdtempSync(join(tmpdir(), "journal-"));
+  try {
+    for (const type of ["hired", "approved", "decision", "sanction"]) {
+      const r = run(["org/tools/log-event.mjs", "head-of-people", type, "сам себе"],
+        { JOURNAL_DIR: tmp, FOUNDER_TOKEN: "угадал" });
+      assert.equal(r.code, 4, `${type} must be refused without the founder token`);
+    }
+  } finally { rmSync(tmp, { recursive: true, force: true }); }
+});
+
+test("a role cannot write its own package root, only its notes", () => {
+  for (const role of ["head-of-people", "head-of-product", "head-of-engineering"]) {
+    assert.equal(violations(role, [`roles/${role}/manifest.json`]).length, 1, `${role} manifest`);
+    assert.equal(violations(role, [`roles/${role}/BOUNDARIES.md`]).length, 1, `${role} boundaries`);
+    assert.equal(violations(role, [`roles/${role}/notes/x.md`]).length, 0, `${role} notes`);
+  }
+});
+
 test("no prose lives in the machine layer", () => {
   const cyrillic = /[\u0400-\u04FF]/;
   for (const role of readdirSync(join(ROOT, "roles"))) {

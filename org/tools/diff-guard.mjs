@@ -15,6 +15,16 @@ import { ROOT } from "./state.mjs";
 
 const STAR = "@@GLOBSTAR@@";
 
+// A guard that cannot run must say so, not report "clean". Without git the old
+// version threw and every shift looked like a policy violation.
+const gitOrDie = (args) => {
+  try { return execFileSync("git", args, { cwd: ROOT, encoding: "utf8" }); }
+  catch (e) {
+    console.error(`страж не может работать: git недоступен (${e.message.split("\n")[0]})`);
+    process.exit(2);
+  }
+};
+
 // ** - any number of segments, * - within one segment.
 export const toRe = (glob) => {
   const body = glob
@@ -31,9 +41,33 @@ export const policyFor = (role) =>
   JSON.parse(readFileSync(join(ROOT, "org", "write-policy.json"), "utf8"))[role];
 
 export const changedPaths = () =>
-  execFileSync("git", ["status", "--porcelain"], { cwd: ROOT, encoding: "utf8" })
+  gitOrDie(["status", "--porcelain"])
     .split("\n").filter(Boolean)
     .map((l) => l.slice(3).trim().replace(/^.* -> /, "").replace(/^"|"$/g, ""));
+
+const FOUNDER_ONLY_TYPES = ["sanction", "hired", "approved", "decision"];
+
+// The journal has to stay writable - log-event.mjs writes it - so the token
+// alone protects the utility, not the file. Here we check the diff itself:
+// append-only, and no privileged event authored by anyone but the founder.
+export function journalViolations(role) {
+  if (role === "founder") return [];
+  const out = [];
+  for (const path of changedPaths().filter((p) => /^journal\/.*\.jsonl$/.test(p))) {
+    let before = "";
+    try { before = execFileSync("git", ["show", `HEAD:${path}`], { cwd: ROOT, encoding: "utf8" }); }
+    catch { before = ""; }   // новый файл дня - нормально
+    const after = readFileSync(join(ROOT, path), "utf8");
+    if (!after.startsWith(before))
+      out.push({ path, why: "журнал изменён не дописыванием" });
+    for (const line of after.slice(before.length).split("\n").filter(Boolean)) {
+      let e; try { e = JSON.parse(line); } catch { out.push({ path, why: "новая строка не JSON" }); continue; }
+      if (FOUNDER_ONLY_TYPES.includes(e.type) || e.agent?.id === "founder")
+        out.push({ path, why: `событие «${e.type}» от имени ${e.agent?.id} - только основатель` });
+    }
+  }
+  return out;
+}
 
 export function violations(role, changed = changedPaths()) {
   const policy = policyFor(role);

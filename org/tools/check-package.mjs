@@ -21,7 +21,10 @@ const dir = join(ROOT, "roles", role);
 const DOCS = ["CHARTER.md", "BOUNDARIES.md", "INSTRUCTIONS.md", "IO.md",
   "COMMS.md", "ACCEPTANCE.md", "PROFILE.md"];
 const read = (f) => { try { return readFileSync(join(dir, f), "utf8"); } catch { return null; } };
-const git = (...a) => { try { return execFileSync("git", a, { cwd: ROOT, encoding: "utf8" }); } catch { return ""; } };
+// null means "git did not answer", which is not the same as "nothing changed".
+// The old version swallowed the error and returned "", so the charter guard
+// reported ok without having checked anything.
+const git = (...a) => { try { return execFileSync("git", a, { cwd: ROOT, encoding: "utf8" }); } catch { return null; } };
 
 const results = [], warnings = [];
 const check = (n, title, ok, hint = "") => results.push({ n, title, ok, hint });
@@ -84,8 +87,10 @@ check(6, "package is at most 1200 lines in total", total <= 1200, `${total} now`
 for (const f of DOCS) if (f !== "INSTRUCTIONS.md" && lines(f) > 120) warn(`${f}: ${lines(f)} lines, over 120`);
 
 // 7. the charter is not touched without an explicit founder sanction
-const charterTouched = git("status", "--porcelain", "COMPANY.md").trim() !== "";
-check(7, "COMPANY.md untouched or sanctioned", !charterTouched || sanctioned("COMPANY.md"),
+const charterStatus = git("status", "--porcelain", "COMPANY.md");
+const charterTouched = charterStatus === null || charterStatus.trim() !== "";
+check(7, "COMPANY.md untouched or sanctioned",
+  charterStatus !== null && (!charterTouched || sanctioned("COMPANY.md")),
   charterTouched ? (sanctioned("COMPANY.md") ? "changed under sanction" : "changed, no sanction today") : "");
 
 // 8. front matter of every review of this role parses
