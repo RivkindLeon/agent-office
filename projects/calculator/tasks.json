@@ -30,7 +30,9 @@
       "behaviour": "умножение двух конечных чисел даёт математически корректный результат",
       "test": "tests/calculator.spec.js",
       "test_name": "multiplies two finite numbers",
-      "status": "todo"
+      "assumption": "Допущение: умножение выбирается значением operation = multiply в существующем интерфейсе calculate, проверить при приёмке",
+      "red_result": "test-output/T-003-red.txt",
+      "status": "red"
     },
     {
       "id": "T-004",

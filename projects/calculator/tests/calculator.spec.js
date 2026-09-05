@@ -25,3 +25,16 @@ test("subtracts two finite numbers", async () => {
     expect(calculate(left, right, "subtract")).toBe(expected);
   }
 });
+
+test("multiplies two finite numbers", async () => {
+  const { calculate } = await import("../src/calculator.js");
+  const examples = [
+    { left: 3, right: 4, expected: 12 },
+    { left: -2, right: 3.5, expected: -7 },
+    { left: 1.25, right: -2, expected: -2.5 },
+  ];
+
+  for (const { left, right, expected } of examples) {
+    expect(calculate(left, right, "multiply")).toBe(expected);
+  }
+});
