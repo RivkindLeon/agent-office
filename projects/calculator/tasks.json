@@ -52,7 +52,9 @@
       "behaviour": "после успешного расчёта полученный результат виден пользователю",
       "test": "tests/result.spec.js",
       "test_name": "shows the result after a successful calculation",
-      "status": "todo"
+      "assumption": "Допущение: элементы формы имеют ID left, operation, right и calculate, а видимый результат выводится в элемент с ID result, проверить при приёмке",
+      "red_result": "test-output/T-005-red.txt",
+      "status": "red"
     }
   ]
 }

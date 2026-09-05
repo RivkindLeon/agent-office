@@ -1,0 +1,46 @@
+command: npm test
+exit_code: 1
+
+> calculator@1.0.0 test
+> playwright test
+
+[WebServer] (node:3797131) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3797144) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3797144) [DEP0066] DeprecationWarning: OutgoingMessage.prototype._headers is deprecated
+
+Running 5 tests using 1 worker
+
+(node:3797156) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/calculator.spec.js:3:1 › adds two finite numbers (278ms)
+  ✓  2 tests/calculator.spec.js:16:1 › subtracts two finite numbers (41ms)
+  ✓  3 tests/calculator.spec.js:29:1 › multiplies two finite numbers (23ms)
+  ✓  4 tests/calculator.spec.js:42:1 › divides two finite numbers with a non-zero divisor (11ms)
+  ✘  5 tests/result.spec.js:3:1 › shows the result after a successful calculation (5.1s)
+
+
+  1) tests/result.spec.js:3:1 › shows the result after a successful calculation ────────────────────
+
+    Test timeout of 5000ms exceeded.
+
+    Error: locator.fill: Test timeout of 5000ms exceeded.
+    Call log:
+      - waiting for locator('#left')
+
+
+      3 | test("shows the result after a successful calculation", async ({ page }) => {
+      4 |   await page.goto("/");
+    > 5 |   await page.locator("#left").fill("2");
+        |                               ^
+      6 |   await page.locator("#operation").selectOption("add");
+      7 |   await page.locator("#right").fill("3");
+      8 |   await page.locator("#calculate").click();
+        at /home/claw/projects/agent-office/projects/calculator/tests/result.spec.js:5:31
+
+    Error Context: test-results/result-shows-the-result-after-a-successful-calculation/error-context.md
+
+  1 failed
+    tests/result.spec.js:3:1 › shows the result after a successful calculation ─────────────────────
+  4 passed (9.4s)
