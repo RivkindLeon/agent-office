@@ -1,0 +1,44 @@
+{
+  "name": "An open question stops the work instead of repeating it",
+  "why": "Nine shifts in a row asked the founder the same thing; the trigger kept firing because nothing checked for a pending question.",
+  "given": {
+    "roles": [
+      {
+        "role": "head-of-people",
+        "from": "head-of-people"
+      }
+    ],
+    "assume_reviewed": [
+      "head-of-people"
+    ],
+    "requisitions": [
+      {
+        "role": "developer",
+        "decision": "approved",
+        "hiring_manager": "head-of-engineering",
+        "reports_to": "head-of-engineering"
+      }
+    ],
+    "questions": [
+      {
+        "role": "developer",
+        "status": "question",
+        "question": "Какой грейд утвердить?"
+      }
+    ],
+    "journal": [
+      {
+        "type": "hired",
+        "subject": "head-of-people"
+      }
+    ]
+  },
+  "expect": {
+    "tasks_empty": [
+      "head-of-people"
+    ],
+    "pending_kinds": [
+      "answer_questions"
+    ]
+  }
+}

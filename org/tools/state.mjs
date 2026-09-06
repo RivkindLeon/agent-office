@@ -272,9 +272,17 @@ export function tasksFor(roleId, state = readState()) {
   // A package that is written, or even accepted, is not an employee. Only a
   // hire - which only the founder can record - starts work. The invariant was
   // asserted in tests and documented, but never enforced here.
-  if (self?.state !== "hired") return [];
   // A role that has not been hired does not work, whatever its triggers say.
   if (self?.state !== "hired") return [];
+  // A role that asked the founder something waits for the answer. Without this
+  // the trigger kept handing out the same step: nine shifts in a row asked the
+  // same question, and the only cost was quota.
+  const awaiting = Object.values(state).filter((r) => r.questions).map((r) => r.id);
+  return tasksFrom(self, state).filter((t) => !awaiting.includes(t.target));
+}
+
+function tasksFrom(self, state) {
+  const roleId = self.id;
   const triggers = self?.manifest?.triggers || [];
   const tasks = [];
   for (const t of triggers) {

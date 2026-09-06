@@ -63,6 +63,10 @@ function build(given) {
           read_by: "founder", decided_by: "founder" }) + "\n# Ревью\n");
   }
 
+  for (const q of given.questions || [])
+    writeFileSync(join(root, "org/reviews", `${q.role}-вопросы.md`),
+      frontMatter({ kind: "questions", ...q }) + "\n# Вопрос\n");
+
   (given.reviews || []).forEach((v, i) =>
     writeFileSync(join(root, "org/reviews", `${v.role}-${v.round || i + 1}-${v.dimension}.md`),
       frontMatter({ kind: "review", ...v }) + "\n# Ревью\n"));
