@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "role": "developer",
+  "version": "1.0",
+  "reports_to": "head-of-engineering",
+  "grade": "middle",
+  "mode": "strict",
+  "model": {
+    "primary": "openai/gpt-5.6-sol",
+    "fallbacks": [
+      "openai/gpt-5.5"
+    ]
+  },
+  "tools_profile": "coding",
+  "budget_tokens": 150000,
+  "boundaries": [
+    "product_scope",
+    "requirements_scope",
+    "architecture_design",
+    "task_decomposition",
+    "self_acceptance",
+    "code_review"
+  ],
+  "triggers": [
+    {
+      "id": "project-ready-for-development",
+      "when": {
+        "op": "project_status",
+        "status": "ready-for-engineering",
+        "without_file": "projects/{target}/REVIEW-REQUEST.md"
+      },
+      "work": "development"
+    }
+  ],
+  "work": [
+    {
+      "id": "development",
+      "target_from": "trigger",
+      "steps": [
+        {
+          "id": "task",
+          "steps_from": {
+            "file": "projects/{target}/tasks.json",
+            "done_status": "green"
+          }
+        },
+        {
+          "id": "request-review",
+          "artifact": "projects/{target}/REVIEW-REQUEST.md"
+        }
+      ]
+    }
+  ]
+}
