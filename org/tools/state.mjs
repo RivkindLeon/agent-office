@@ -126,7 +126,12 @@ export function readState() {
     if (fm.decided_by && fm.decided_by === fm.role) continue;
     const r = roles[fm.role];
     if (!r) continue;
-    if (fm.kind === "questions") { r.questions = `org/reviews/${f}`; continue; }
+    // Открытым считается только неотвеченный вопрос: иначе ответ основателя
+    // ничего не разблокирует, а роль будет ждать вечно.
+    if (fm.kind === "questions") {
+      if (["question", "open"].includes(fm.status || "question")) r.questions = `org/reviews/${f}`;
+      continue;
+    }
     r.reviews.push({
       file: `org/reviews/${f}`,
       verdict: fm.verdict || null,
