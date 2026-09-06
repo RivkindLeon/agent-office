@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "role": "head-of-engineering",
-  "version": "3.0",
+  "version": "4.0",
   "reports_to": "ceo",
   "grade": "senior",
   "mode": "strict",
@@ -29,6 +29,32 @@
         "without_file": "projects/{target}/DELIVERY.md"
       },
       "work": "engineering"
+    },
+    {
+      "id": "developer-review-request",
+      "when": {
+        "op": "file_exists",
+        "path": "projects/{target}/REVIEW-REQUEST.md"
+      },
+      "work": "code-review"
+    },
+    {
+      "id": "hiring-manager-needs-substance",
+      "when": {
+        "op": "role_state",
+        "scope": "others",
+        "state": "requisition_approved"
+      },
+      "work": "substance"
+    },
+    {
+      "id": "subordinate-package-needs-substance",
+      "when": {
+        "op": "role_state",
+        "scope": "others",
+        "state": "review_pending"
+      },
+      "work": "substance-review"
     }
   ],
   "work": [
@@ -54,6 +80,36 @@
         {
           "id": "submit-delivery",
           "artifact": "projects/{target}/DELIVERY.md"
+        }
+      ]
+    },
+    {
+      "id": "code-review",
+      "target_from": "trigger",
+      "steps": [
+        {
+          "id": "review",
+          "artifact": "projects/{target}/CODE-REVIEW.md"
+        }
+      ]
+    },
+    {
+      "id": "substance",
+      "target_from": "trigger",
+      "steps": [
+        {
+          "id": "substance",
+          "check": "hiring_manager_substance_recorded"
+        }
+      ]
+    },
+    {
+      "id": "substance-review",
+      "target_from": "trigger",
+      "steps": [
+        {
+          "id": "substance-review",
+          "check": "substance_verdict_recorded"
         }
       ]
     }
