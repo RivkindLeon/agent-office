@@ -1,0 +1,1 @@
+{"schema_version":1,"event_id":"67a56bc8-c184-4531-97fe-02312128ede4","run_id":null,"ts":"2026-09-06T06:23:03.310Z","agent":{"id":"founder"},"type":"decision","subject":"developer","summary":"Ревью кода принято паттерном компании; заявка на разработчика","detail_ref":"org/requisitions/developer.md","outcome":"ok"}
