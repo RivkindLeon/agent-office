@@ -63,6 +63,10 @@ function build(given) {
           read_by: "founder", decided_by: "founder" }) + "\n# Ревью\n");
   }
 
+  for (const cr of given.changeRequests || [])
+    writeFileSync(join(root, "org/requisitions", `${cr.role}-change.md`),
+      frontMatter({ kind: "change-request", ...cr }) + "\n# Заявка на изменение\n");
+
   for (const q of given.questions || [])
     writeFileSync(join(root, "org/reviews", `${q.role}-вопросы.md`),
       frontMatter({ kind: "questions", ...q }) + "\n# Вопрос\n");

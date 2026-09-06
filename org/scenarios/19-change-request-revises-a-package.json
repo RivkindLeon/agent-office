@@ -1,0 +1,47 @@
+{
+  "name": "A change request makes the hiring function revise an existing package",
+  "why": "Revising a package used to be smuggled into someone else's requisition; a change request must not create a new role.",
+  "given": {
+    "roles": [
+      {
+        "role": "head-of-people",
+        "from": "head-of-people"
+      },
+      {
+        "role": "head-of-engineering",
+        "version": "3.0"
+      }
+    ],
+    "assume_reviewed": [
+      "head-of-people",
+      "head-of-engineering"
+    ],
+    "changeRequests": [
+      {
+        "role": "head-of-engineering",
+        "from_version": "3.0",
+        "decision": "approved"
+      }
+    ],
+    "journal": [
+      {
+        "type": "hired",
+        "subject": "head-of-people"
+      },
+      {
+        "type": "hired",
+        "subject": "head-of-engineering"
+      }
+    ]
+  },
+  "expect": {
+    "states": {
+      "head-of-engineering": "hired"
+    },
+    "tasks_contain": {
+      "head-of-people": [
+        "apply-change-request"
+      ]
+    }
+  }
+}

@@ -13,6 +13,7 @@ import { ROOT } from "./state.mjs";
 const TASKS_RU = {
   "write-package": (t) => `написать пакет должности ${t.role} — заявка одобрена, ${t.requisition}`,
   "revise-package": (t) => `круг правок по пакету ${t.role} — вердикт в ${t.review}, читать целиком`,
+  "apply-change-request": (t) => `пересмотреть пакет ${t.role} по заявке на изменение — ${t.change}`,
   "record-hire": (t) => `внести ${t.role} в org/ORG.md — вердикт «принято» на версию ${t.version}`,
   "brief-needs-product": (t) => `наполнить продуктовый бриф projects/${t.target}/BRIEF.md`,
 };
@@ -27,6 +28,7 @@ const STEPS_RU = {
   acceptance: "критерии приёмки работы должности",
   profile: "квалификация и обоснование грейда",
   instructions: "рабочая инструкция",
+  "apply-change": "внести изменения из заявки и поднять старшую версию пакета",
   submit: "сдать работу: прогнать проверки и отдать на ревью",
   "submit-delivery": "сдать работу: собрать DELIVERY.md — что построено, какое требование каким тестом закрыто, вывод последнего прогона — и поставить `status: ready-for-acceptance`",
   "submit-brief": "сдать бриф: проверить его по своему ACCEPTANCE.md и поставить в front matter `status: ready-for-review`",

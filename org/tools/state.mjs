@@ -93,8 +93,17 @@ export function readState() {
   const roles = {};
   const journal = readJournal();
 
+  const changeRequests = [];
   for (const f of list("org/requisitions").filter((f) => f.endsWith(".md"))) {
     const fm = readFrontMatter(abs(`org/requisitions/${f}`)) || {};
+    // A change request is about a role that already exists: it must not create
+    // one. Before this, revising a package had to be smuggled into someone
+    // else's requisition.
+    if (fm.kind === "change-request") {
+      changeRequests.push({ role: fm.role, file: `org/requisitions/${f}`,
+        fromVersion: fm.from_version || "0.0", decision: fm.decision || "pending" });
+      continue;
+    }
     const id = fm.role || f.replace(/\.md$/, "");
     roles[id] = {
       id,
@@ -143,6 +152,14 @@ export function readState() {
     });
   }
 
+  for (const cr of changeRequests) {
+    const r = roles[cr.role];
+    if (!r || cr.decision !== "approved") continue;
+    // Open until the package moves past the version the request was written
+    // against: the bump is the proof the change happened.
+    if (majorOf(r.version) <= majorOf(cr.fromVersion)) r.changeRequest = cr;
+  }
+
   // "Hired" is a founder decision, and founder events are token-protected.
   // Reading it from the journal rather than from prose removes a whole class
   // of drift: the org chart becomes a rendering, not a source.
@@ -183,7 +200,7 @@ export function readState() {
 }
 
 /** Closed, deterministic trigger language. No eval, no shell, no model judgement. */
-const OPS = {
+export const OPS = {
   role_state(cond, self, state) {
     const hits = [];
     for (const r of Object.values(state)) {
@@ -194,6 +211,11 @@ const OPS = {
       hits.push(r);
     }
     return hits;
+  },
+  // A role with an approved change request that has not been applied yet.
+  open_change_request(cond, self, state) {
+    return Object.values(state).filter((r) =>
+      r.changeRequest && (cond.scope === "self") === (r.id === self.id));
   },
   front_matter_equals(cond, self, state) {
     const fm = readFrontMatter(abs(cond.path));
@@ -295,10 +317,11 @@ function tasksFrom(self, state) {
     if (!op) { tasks.push({ trigger: t.id, role: roleId, unknown: t.when?.op }); continue; }
     for (const hit of op(t.when, self, state)) {
       const target = hit.project || t.target || hit.id;
+      const change = hit.changeRequest?.file;
       const step = t.work ? nextStep(self, t.work, target) : null;
       tasks.push({ trigger: t.id, role: hit.id, target, requisition: hit.requisition,
         review: hit.lastReview?.file, version: hit.version, path: t.when.path,
-        work: t.work || null, step: step?.id || null, item: step?.task || null,
+        work: t.work || null, step: step?.id || null, item: step?.task || null, change,
         artifact: step?.artifact?.replace("{target}", target) || null });
     }
   }

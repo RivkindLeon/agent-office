@@ -10,7 +10,7 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { ROOT, readState } from "./state.mjs";
+import { ROOT, readState, OPS as ENGINE_OPS } from "./state.mjs";
 import { readFrontMatter } from "./frontmatter.mjs";
 
 const role = process.argv[2];
@@ -68,9 +68,10 @@ const boundaries = ((read("BOUNDARIES.md") || "").match(/^\s*[-*]\s+\S/gm) || []
 check(3, "BOUNDARIES.md lists at least three boundaries", boundaries >= 3, `${boundaries}`);
 
 // 4. triggers are declarative and use known operations
-// Keep in step with the OPS table in state.mjs: a trigger the engine knows but
-// the check does not is a package that can never be accepted.
-const OPS = ["role_state", "front_matter_equals", "file_exists", "project_status"];
+// Imported, not copied: two hand-synced lists drifted twice, and each time a
+// package became unacceptable because the check did not know an operation the
+// engine had.
+const OPS = Object.keys(ENGINE_OPS);
 const badTriggers = (m.triggers || []).filter((t) => !t.id || !OPS.includes(t.when?.op));
 check(4, "triggers are declarative and use known operations",
   Array.isArray(m.triggers) && m.triggers.length > 0 && badTriggers.length === 0,
@@ -94,8 +95,11 @@ check(7, "COMPANY.md untouched or sanctioned",
   charterTouched ? (sanctioned("COMPANY.md") ? "changed under sanction" : "changed, no sanction today") : "");
 
 // 8. front matter of every review of this role parses
-const reviews = existsSync(join(ROOT, "org/reviews"))
-  ? readdirSync(join(ROOT, "org/reviews")).filter((f) => f.startsWith(role) && f.endsWith(".md")) : [];
+// Questions are not verdicts: judging them by verdict rules made a package
+// unacceptable because a question has no dimension and no decided_by.
+const reviews = (existsSync(join(ROOT, "org/reviews"))
+  ? readdirSync(join(ROOT, "org/reviews")).filter((f) => f.startsWith(role) && f.endsWith(".md")) : [])
+  .filter((f) => readFrontMatter(join(ROOT, "org/reviews", f))?.kind !== "questions");
 const badReviews = reviews.filter((f) => {
   const fm = readFrontMatter(join(ROOT, "org/reviews", f));
   return !fm || !fm.verdict || !fm.package_version || !fm.dimension

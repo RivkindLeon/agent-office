@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "role": "head-of-people",
-  "version": "11.0",
+  "version": "12.0",
   "reports_to": "ceo",
   "grade": "middle",
   "mode": "strict",
@@ -43,6 +43,14 @@
         "scope": "others",
         "state": "accepted"
       }
+    },
+    {
+      "id": "apply-change-request",
+      "when": {
+        "op": "open_change_request",
+        "scope": "others"
+      },
+      "work": "change"
     }
   ],
   "work": [
@@ -85,6 +93,16 @@
         {
           "id": "submit",
           "check": "package_complete"
+        }
+      ]
+    },
+    {
+      "id": "change",
+      "target_from": "trigger",
+      "steps": [
+        {
+          "id": "apply-change",
+          "check": "version_bumped"
         }
       ]
     }
