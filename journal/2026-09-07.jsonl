@@ -1,0 +1,1 @@
+{"schema_version":1,"event_id":"9b0dd2d8-a7c9-47f0-b89c-a39fdfebb143","run_id":null,"ts":"2026-09-07T11:01:25.188Z","agent":{"id":"founder"},"type":"decision","subject":"calculator","summary":"Калькулятор возвращён на доработку: пять блокеров, раунд 1","detail_ref":"projects/calculator/DELIVERY.md","outcome":"ok"}

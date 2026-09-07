@@ -1,0 +1,59 @@
+{
+  "name": "A returned delivery wakes the engineer again",
+  "why": "The founder's notes must reach the doer: a delivery marked changes-requested is not a finished delivery.",
+  "given": {
+    "roles": [
+      {
+        "role": "head-of-engineering",
+        "from": "head-of-engineering"
+      }
+    ],
+    "assume_reviewed": [
+      "head-of-engineering"
+    ],
+    "projects": [
+      {
+        "project": "calculator",
+        "status": "ready-for-engineering",
+        "artifacts": {
+          "DESIGN.md": {
+            "kind": "design",
+            "project": "calculator"
+          },
+          "tasks.json": {
+            "tasks": [
+              {
+                "id": "T-001",
+                "status": "green"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "deliveries": [
+      {
+        "project": "calculator",
+        "status": "changes-requested",
+        "round": 1
+      }
+    ],
+    "journal": [
+      {
+        "type": "hired",
+        "subject": "head-of-engineering"
+      }
+    ]
+  },
+  "expect": {
+    "tasks_contain": {
+      "head-of-engineering": [
+        "project-ready-for-engineering"
+      ]
+    },
+    "pending_kinds": [],
+    "steps": {
+      "head-of-engineering": "design"
+    }
+  }
+}

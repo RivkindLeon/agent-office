@@ -159,3 +159,13 @@ test("nothing is waiting on the founder while a round is open", () => {
   if (st["head-of-product"].state === "changes_requested" && st["head-of-product"].round < 3)
     assert.equal(pending.some((i) => i.role === "head-of-product"), false);
 });
+
+test("a returned task tells the doer it was returned", () => {
+  // The engine sends the doer back to the first step (golden scenario 20); the
+  // wording has to say why, otherwise the shift rewrites the artefact blind.
+  const text = renderTask({ trigger: "project-ready-for-engineering", role: "head-of-engineering",
+    target: "calculator", step: "design", round: 2, returnedIn: "projects/calculator/DELIVERY.md" });
+  assert.match(text, /работу вернули \(раунд 2\)/);
+  assert.match(text, /projects\/calculator\/DELIVERY\.md/);
+  assert.match(text, /round: 2/);
+});

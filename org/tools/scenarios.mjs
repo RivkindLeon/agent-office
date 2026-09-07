@@ -79,6 +79,12 @@ function build(given) {
     mkdirSync(join(root, "projects", pr.project), { recursive: true });
     writeFileSync(join(root, "projects", pr.project, "BRIEF.md"),
       frontMatter({ kind: "brief", ...pr }) + "\n# Бриф\n");
+    // Artefacts of an earlier round: they exist, so without the round rule the
+    // engine would count their steps as done.
+    for (const [file, fm] of Object.entries(pr.artifacts || {}))
+      writeFileSync(join(root, "projects", pr.project, file),
+        file.endsWith(".json") ? JSON.stringify(fm, null, 2)
+                               : frontMatter(fm) + "\n# Артефакт\n");
   }
 
   for (const d of given.deliveries || []) {
@@ -119,6 +125,13 @@ for (const file of readdirSync(DIR).filter((f) => f.endsWith(".json")).sort()) {
       for (const needle of needles)
         if (!(got.tasks[role] || []).some((t) => t.trigger === needle))
           problems.push(`task for ${role} missing: ${needle}`);
+    // A trigger that fires with the wrong step is still a broken loop: after a
+    // return the doer must be sent back to the top of the work, not to submit.
+    for (const [role, want] of Object.entries(sc.expect.steps || {})) {
+      const got_ = (got.tasks[role] || [])[0] || {};
+      if (got_.step !== want)
+        problems.push(`step for ${role}: expected ${want}, got ${got_.step || "none"}`);
+    }
     for (const role of sc.expect.tasks_empty || [])
       if ((got.tasks[role] || []).length)
         problems.push(`${role} should have no work, got: ${got.tasks[role].map((t) => t.trigger).join("; ")}`);

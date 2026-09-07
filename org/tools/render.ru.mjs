@@ -52,14 +52,20 @@ const STEPS_RU = {
 export const renderTask = (t) => {
   const base = (TASKS_RU[t.trigger] || ((x) => `${x.trigger} по ${x.role}`))(t);
   if (!t.step) return base;
+  // A return is not a remark on the last step: the work reopens from the top.
+  const returned = t.round
+    ? `\n  работу вернули (раунд ${t.round}) — сначала прочитать замечания в ${t.returnedIn}`
+      + `\n  артефакт этого шага переписать под замечания и проставить в нём \`round: ${t.round}\`,`
+      + ` иначе движок считает шаг несделанным`
+    : "";
   if (t.item) {
     const phase = t.item.status === "red"
       ? "тест уже красный — напиши минимальный код, чтобы он позеленел"
       : "напиши тест на это поведение и покажи, что он падает; кода не писать";
-    return `${base}\n  задача ${t.item.id} (${t.item.requirement}): ${t.item.behaviour}\n  ${phase}\n  одна задача за смену, следующая — только после зелёного`;
+    return `${base}${returned}\n  задача ${t.item.id} (${t.item.requirement}): ${t.item.behaviour}\n  ${phase}\n  одна задача за смену, следующая — только после зелёного`;
   }
   const what = STEPS_RU[t.step] || t.step;
-  return `${base}\n  шаг этой смены — ${what}${t.artifact ? ` (${t.artifact})` : ""}\n  один шаг за смену: остальное подождёт следующей`;
+  return `${base}${returned}\n  шаг этой смены — ${what}${t.artifact ? ` (${t.artifact})` : ""}\n  один шаг за смену: остальное подождёт следующей`;
 };
 
 export const STATE_RU = {

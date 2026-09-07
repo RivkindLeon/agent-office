@@ -230,7 +230,9 @@ export const OPS = {
       if (!fm || fm.status !== cond.status) continue;
       // Работа, уже сданная, не выдаётся снова: без этого исполнитель крутится
       // на проекте вечно, потому что статус брифа меняет не он.
-      if (cond.without_file && existsSync(abs(cond.without_file.replace("{target}", dir)))) continue;
+      // Сдача закрывает работу — но только пока её не вернули. Возврат должен
+      // будить исполнителя снова, иначе замечания основателя ничего не меняют.
+      if (cond.without_file && settled(cond.without_file.replace("{target}", dir))) continue;
       hits.push({ ...self, project: dir });
     }
     return hits;
@@ -250,8 +252,42 @@ const DEFAULT_STEPS = [
   { id: "submit", check: "manual" },
 ];
 
+/** A returned artefact is not a finished artefact. Both the trigger and the
+ * step completion ask the same question, so they ask it in one place. */
+export const RETURNED = "changes-requested";
+const settled = (file) => {
+  if (!existsSync(abs(file))) return false;
+  const fm = readFrontMatter(abs(file));
+  return !fm || fm.status !== RETURNED;
+};
+
+/** The round an artefact belongs to. Front matter for prose, a top-level key
+ * for JSON plans. An artefact that never heard of rounds is round zero. */
+const roundOf = (file) => {
+  if (!existsSync(abs(file))) return 0;
+  if (file.endsWith(".json")) {
+    try { return Number(JSON.parse(readFileSync(abs(file), "utf8")).round || 0); }
+    catch { return 0; }
+  }
+  return Number((readFrontMatter(abs(file)) || {}).round || 0);
+};
+
+/** A return does not reopen the last step, it reopens the work. Otherwise the
+ * doer's next shift is "submit the delivery again": the notes change nothing,
+ * because every earlier artefact still counts as finished. Every step made
+ * before the return is stale until its artefact says which round it answers. */
+const openRound = (target) => {
+  const d = `projects/${target}/DELIVERY.md`;
+  if (!existsSync(abs(d))) return 0;
+  const fm = readFrontMatter(abs(d)) || {};
+  return fm.status === RETURNED ? Number(fm.round || 1) : 0;
+};
+
 const stepDone = (step, target) => {
-  if (step.artifact) return existsSync(abs(step.artifact.replace("{target}", target)));
+  if (step.artifact) {
+    const file = step.artifact.replace("{target}", target);
+    return settled(file) && roundOf(file) >= openRound(target);
+  }
   // Done means the artefact carries the answer, not that the worker said so.
   // The previous predicate looked for a `steps_done` key nobody had ever told
   // the agent about: it did the work correctly seven shifts in a row and the
@@ -269,6 +305,7 @@ const stepDone = (step, target) => {
 // the first unfinished one.
 function pendingTask(step, target) {
   const file = step.steps_from.file.replace("{target}", target);
+  if (roundOf(file) < openRound(target)) return { missing: file };
   let data;
   try { data = JSON.parse(readFileSync(abs(file), "utf8")); } catch { return { missing: file }; }
   const done = step.steps_from.done_status || "green";
@@ -280,14 +317,16 @@ function pendingTask(step, target) {
 export function nextStep(self, workId, target) {
   const work = (self?.manifest?.work || []).find((w) => w.id === workId);
   const steps = work?.steps || DEFAULT_STEPS;
+  const round = openRound(target);
+  const mark = (step) => (round ? { ...step, round, returnedIn: `projects/${target}/DELIVERY.md` } : step);
   for (const step of steps) {
     if (step.steps_from) {
       const p = pendingTask(step, target);
       if (p === null) continue;                       // every task is done
-      if (p.missing) return { ...step, missing: p.missing };
-      return { ...step, task: p.task };
+      if (p.missing) return mark({ ...step, missing: p.missing });
+      return mark({ ...step, task: p.task });
     }
-    if (!stepDone(step, target)) return step;
+    if (!stepDone(step, target)) return mark(step);
   }
   return null;
 }
@@ -322,6 +361,7 @@ function tasksFrom(self, state) {
       tasks.push({ trigger: t.id, role: hit.id, target, requisition: hit.requisition,
         review: hit.lastReview?.file, version: hit.version, path: t.when.path,
         work: t.work || null, step: step?.id || null, item: step?.task || null, change,
+        round: step?.round || 0, returnedIn: step?.returnedIn || null,
         artifact: step?.artifact?.replace("{target}", target) || null });
     }
   }
